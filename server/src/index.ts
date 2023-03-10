@@ -1,20 +1,23 @@
 import * as dotenv from 'dotenv'
 dotenv.config()
 import express, { Express } from 'express'
-import Sequelize from 'sequelize/types/sequelize'
-const sequelize: Sequelize = require('./db')
-const models = require('./models/models')
+import sequelize from './db'
+import * as model from './models/models'
+import router from './routes'
+import apiErrorHandler from './middleware/ErrorHandlingMiddleware'
+import fileUpload from 'express-fileupload'
+import path from 'path'
 const cors = require('cors')
-const router = require('./routes/index')
-const errorHandler = require('./middleware/ErrorHandlingMiddleware')
 
 const app: Express = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static(path.resolve(__dirname, 'static')))
+app.use(fileUpload({}))
 app.use('/api', router)
 // в конце!
-app.use(errorHandler)
+app.use(apiErrorHandler)
 
 const PORT = process.env.PORT
 

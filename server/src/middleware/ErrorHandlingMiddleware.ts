@@ -1,11 +1,7 @@
 import { Request, Response } from 'express'
 import ApiError from '../error/ApiError'
 
-module.exports = function apiErrorHandler(
-  err: Error,
-  req: Request,
-  res: Response
-) {
+function apiErrorHandler(err: Error, req: Request, res: Response) {
   // Логирование ошибок
   console.error(err)
 
@@ -26,3 +22,5 @@ module.exports = function apiErrorHandler(
     .status(500)
     .json({ message: 'Непредвиденная ошибка, повторите попытку позже.' })
 }
+
+export default apiErrorHandler

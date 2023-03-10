@@ -1,4 +1,4 @@
-interface ApiErrorOptions {
+interface IApiErrorOptions {
   errors?: unknown[]
 }
 
@@ -9,7 +9,7 @@ export default class ApiError extends Error {
   constructor(
     status: number,
     message: string,
-    { errors = [] }: ApiErrorOptions = {}
+    { errors = [] }: IApiErrorOptions = {}
   ) {
     super(message)
     this.status = status
@@ -32,5 +32,3 @@ export default class ApiError extends Error {
     return new ApiError(500, 'Внутренняя ошибка сервера', { errors: [error] })
   }
 }
-
-module.exports = ApiError

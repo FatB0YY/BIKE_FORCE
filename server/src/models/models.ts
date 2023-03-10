@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize'
-import Sequelize from 'sequelize/types/sequelize'
-const sequelize: Sequelize = require('./db')
+import sequelize from '../db'
 
 const User = sequelize.define('User', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -46,7 +45,6 @@ const DeviceInfo = sequelize.define('DeviceInfo', {
   description: { type: DataTypes.STRING, allowNull: false },
 })
 
-// связующая модель
 const TypeBrand = sequelize.define('TypeBrand', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 })
@@ -72,14 +70,13 @@ Rating.belongsTo(Device)
 Device.hasMany(BasketDevice)
 BasketDevice.belongsTo(Device)
 
-Device.hasMany(DeviceInfo, { as: 'Info' })
+Device.hasMany(DeviceInfo, { as: 'info' })
 DeviceInfo.belongsTo(Device)
 
-// много ко многим
 Type.belongsToMany(Brand, { through: TypeBrand })
 Brand.belongsToMany(Type, { through: TypeBrand })
 
-module.exports = {
+export {
   User,
   Basket,
   BasketDevice,

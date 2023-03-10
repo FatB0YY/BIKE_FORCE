@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 
-export default class UserController {
+class UserController {
   async registration(req: Request, res: Response, next: NextFunction) {}
 
   async login(req: Request, res: Response, next: NextFunction) {}
@@ -8,4 +8,4 @@ export default class UserController {
   async refresh(req: Request, res: Response, next: NextFunction) {}
 }
 
-module.exports = new UserController()
+export default new UserController()
