@@ -1,34 +1,36 @@
-interface IApiErrorOptions {
-  errors?: unknown[]
-}
-
-export default class ApiError extends Error {
+class ApiError extends Error {
   status: number
   errors: unknown[]
 
-  constructor(
-    status: number,
-    message: string,
-    { errors = [] }: IApiErrorOptions = {}
-  ) {
+  constructor(status: number, message: string, errors = []) {
     super(message)
     this.status = status
     this.errors = errors
   }
 
   static badRequest(message: string, errors: unknown[] = []) {
-    return new ApiError(400, message, { errors })
+    return new ApiError(400, message)
   }
 
   static unauthorized() {
-    return new ApiError(401, 'Неавторизованный')
+    return new ApiError(401, 'Не авторизован')
   }
 
-  static forbiddenError(error: unknown) {
-    return new ApiError(403, 'Запрещенный', { errors: [error] })
+  static tokenExpiredError() {
+    return new ApiError(401, 'Срок действия токена истек')
+  }
+
+  static jsonWebTokenError() {
+    return new ApiError(401, 'Недействительный токен')
+  }
+
+  static forbiddenError() {
+    return new ApiError(403, 'Запрещенный')
   }
 
   static internalError(error: unknown) {
-    return new ApiError(500, 'Внутренняя ошибка сервера', { errors: [error] })
+    return new ApiError(500, 'Внутренняя ошибка сервера')
   }
 }
+
+export default ApiError

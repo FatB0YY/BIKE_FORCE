@@ -3,7 +3,7 @@ dotenv.config()
 import express, { Express } from 'express'
 import sequelize from './db'
 import * as model from './models/models'
-import router from './routes'
+import router from './routes/index.routes'
 import apiErrorHandler from './middleware/ErrorHandlingMiddleware'
 import fileUpload from 'express-fileupload'
 import path from 'path'
@@ -11,7 +11,12 @@ const cors = require('cors')
 
 const app: Express = express()
 
-app.use(cors())
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.CLIENT_URL,
+  })
+)
 app.use(express.json())
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))

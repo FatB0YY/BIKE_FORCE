@@ -25,8 +25,6 @@ class DeviceController {
       img.mv(path.resolve(__dirname, '..', 'static', fileName))
 
       // исправить тип
-      console.log('brandId', BrandId)
-      console.log('typeId', TypeId)
       const device = (await Device.create({
         name,
         price,
