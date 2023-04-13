@@ -11,22 +11,38 @@ function authCheckMiddleware(req: IRequestWithUser, res: Response, next: NextFun
   }
 
   try {
+    // получаем Header Authorization
     const authorizationHeader: string | undefined = req.headers.authorization
     if (!authorizationHeader) {
       return next(ApiError.unauthorized())
     }
 
+    // проверяем тип токена
+    const bearer: string = authorizationHeader.split(' ')[0]
+    if (bearer !== 'Bearer') {
+      return next(ApiError.forbiddenError())
+    }
+
+    // проверяем есть ли там токен
     const accessToken: string = authorizationHeader.split(' ')[1]
     if (!accessToken) {
       return next(ApiError.jsonWebTokenError())
     }
 
-    const user = tokenService.validateAccessToken(accessToken)
-    if (!user || user instanceof pkg.JsonWebTokenError) {
+    // получаем данные из токена
+    const userTokenData: any = tokenService.validateAccessToken(accessToken)
+
+    // проверяем есть ли данные
+    if (!userTokenData) {
+      return next(ApiError.forbiddenError())
+    }
+
+    // проверяем токен
+    if (userTokenData instanceof pkg.JsonWebTokenError) {
       return next(ApiError.jsonWebTokenError())
     }
 
-    const userDto = new UserDTO(user as IUserAttributes)
+    const userDto = new UserDTO(userTokenData as IUserAttributes)
     req.user = userDto
     next()
   } catch (error: any) {

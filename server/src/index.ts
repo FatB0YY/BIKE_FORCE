@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv'
-dotenv.config()
+dotenv.config({ path: `.${process.env.NODE_ENV}.env` })
 
 import express, { Express, json } from 'express'
 import * as model from './models/models.js'

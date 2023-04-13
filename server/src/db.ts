@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv'
-dotenv.config()
+dotenv.config({ path: `.${process.env.NODE_ENV}.env` })
 import { Sequelize } from 'sequelize'
 
 const sequelize: Sequelize = new Sequelize(

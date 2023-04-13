@@ -1,12 +1,14 @@
 import ApiError from '../error/ApiError.js'
 import bcrypt from 'bcrypt'
-import { User } from '../models/models.js'
+import { User, UserRole } from '../models/models.js'
 import UserDTO from '../dtos/userDto.js'
 import tokenService from './tokenService.js'
-import { IUserAttributes, UserRoles } from '../models/IUser.js'
+import { IUserAttributes } from '../models/IUser.js'
+import { IRole } from '../models/IRole.js'
+import roleService from './roleService.js'
 
 class UserService {
-  async registration(email: string, password: string, role: UserRoles) {
+  async registration(email: string, password: string, roles: IRole[]) {
     const userCandidate = await User.findOne({
       where: { email },
     })
@@ -21,8 +23,18 @@ class UserService {
     const user = (await User.create({
       email,
       password: hashPassword,
-      role,
     })) as unknown as IUserAttributes
+
+    if (roles.length > 0) {
+      // Получаем роли, которые соответствуют массиву roles: IRole[]
+      const rolesDb = await roleService.getRolesFromDb(roles)
+
+      // сохраняем связи между пользователем и ролями в связ. таблице
+      const userRoles = await roleService.saveUserRoleTable(rolesDb, user)
+
+      // сохраняем роли
+      await UserRole.bulkCreate(userRoles)
+    }
 
     const userDto = new UserDTO(user)
 

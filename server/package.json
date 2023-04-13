@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "npx nodemon",
-    "build": "rimraf ./dist && npx tsc",
+    "dev": "cross-env NODE_ENV=development npx nodemon",
+    "build": "cross-env NODE_ENV=production rimraf ./dist && npx tsc",
     "start": "npm run build && node dist/index"
   },
   "keywords": [],
@@ -21,6 +21,7 @@
     "@types/node": "^18.15.11",
     "@types/uuid": "^9.0.1",
     "@types/winston": "^2.4.4",
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.22",
     "rimraf": "^4.4.1",
     "ts-node": "^10.9.1",

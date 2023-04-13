@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from 'express'
 import { IRequestWithUser } from '../models/IUser.js'
-import { Basket } from '../models/models.js'
+import { Basket, User } from '../models/models.js'
 import userService from '../services/userService.js'
+import { IRole } from '../models/IRole.js'
+import ApiError from '../error/ApiError.js'
 
 class UserController {
   async registration(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, password, role } = req.body
+      const { email, password, roles } = req.body
 
-      const userData = await userService.registration(email, password, role)
+      const userData = await userService.registration(email, password, roles as IRole[])
 
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -72,6 +74,26 @@ class UserController {
     try {
       const users = await userService.getAllUsers()
       return res.json(users)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async ban(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId, banReason } = req.body
+
+      // Найти пользователя по id и обновить соответствующие поля
+      const [numRowsUpdated, [updatedUser]] = await User.update(
+        { isBan: true, banReason },
+        { returning: true, where: { id: userId } },
+      )
+
+      if (numRowsUpdated === 0) {
+        throw ApiError.BadRequest('Пользователь не найден')
+      }
+
+      return res.json(updatedUser)
     } catch (error) {
       next(error)
     }

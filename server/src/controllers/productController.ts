@@ -110,29 +110,19 @@ class ProductController {
 
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params
+      const id = req.params.id
 
-      const product = await Product.findByPk(id)
+      // Найти продукт по id и обновить соответствующие поля
+      const [numRowsUpdated, [updatedProduct]] = await Product.update(
+        { isActive: false },
+        { returning: true, where: { id } },
+      )
 
-      if (!product) {
-        throw ApiError.BadRequest('Данного товара не существует')
+      if (numRowsUpdated === 0) {
+        throw ApiError.BadRequest('Продукт не найден')
       }
 
-      await product.destroy()
-
-      // также удалить:
-      // 1. DeviceInfo
-      // 2.
-
-      const productInfo = ProductInfo.findOne({
-        where: {
-          DeviceId: id,
-        },
-      })
-
-      console.log('deviceInfo ONE', productInfo)
-
-      return res.json({ message: 'Товар успешно удален' })
+      return res.json(updatedProduct)
     } catch (error) {
       next(error)
     }

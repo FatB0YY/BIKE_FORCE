@@ -7,27 +7,15 @@ export interface IUserAttributes {
   password: string
   createdAt?: Date
   updatedAt?: Date
-  role: UserRoles
-}
-
-export enum UserRoles {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-  GUEST = 'GUEST',
+  isActive: boolean
+  isBan: boolean
+  banReason: string
 }
 
 export interface IRequestWithUser extends Request {
   user?: UserDTO
 }
 
-// import { Optional } from 'sequelize';
-
-// interface TokenAttributes {
-//   id: string;
-//   refreshToken: string;
-//   UserId: string
-// }
-
-// interface TokenCreationAttributes extends Optional<TokenAttributes, 'UserId'> {}
-
-// export { TokenAttributes, TokenCreationAttributes };
+export enum UserRoleAdmin {
+  ADMIN = 'ADMIN',
+}
