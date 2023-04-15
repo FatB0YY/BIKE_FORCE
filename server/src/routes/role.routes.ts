@@ -8,8 +8,9 @@ import validateMiddleware from '../error/validateRequestSchema.js'
 const router = Router()
 
 router.post('/', roleValidation, validateMiddleware, checkRoleMiddleware(UserRoleAdmin.ADMIN), roleController.create)
-router.get('/', roleController.getAll)
-router.get('/getOne', roleController.getRoleByName)
 router.post('/addRole', checkRoleMiddleware(UserRoleAdmin.ADMIN), roleController.addRole)
+router.get('/', checkRoleMiddleware(UserRoleAdmin.ADMIN), roleController.getAll)
+router.get('/getOne', checkRoleMiddleware(UserRoleAdmin.ADMIN), roleController.getRoleByName)
+router.get('/getUserRoles', roleController.getUserRoles)
 
 export default router

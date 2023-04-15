@@ -73,6 +73,24 @@ class RoleController {
       next(error)
     }
   }
+
+  // http://localhost:8080/api/role/getUserRoles?userId=1
+  async getUserRoles(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId: number = Number(req.query.userId)
+      const user = await User.findByPk(userId)
+
+      if (!user) {
+        throw ApiError.BadRequest('Пользователь не найден')
+      }
+
+      const roles = await roleService.getUserRoles(userId)
+
+      return res.json(roles)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export default new RoleController()

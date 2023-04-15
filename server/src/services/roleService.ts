@@ -9,7 +9,13 @@ class RoleService {
     const rolesDb = await Role.findAll({ where: { id: roles.map((role) => role.id) } })
 
     if (!rolesDb) {
-      throw ApiError.BadRequest('У пользователя нет ролей!')
+      throw ApiError.BadRequest('Нет ролей!')
+    }
+
+    if (rolesDb.length !== roles.length) {
+      const missingRoles = roles.filter((role) => !rolesDb.find((dbRole: any) => dbRole.id === role.id))
+
+      throw ApiError.BadRequest(`Роли ${missingRoles.map((role) => role.value).join(', ')} не найдены в базе данных`)
     }
 
     return rolesDb
@@ -40,6 +46,20 @@ class RoleService {
     for (const role of roles) {
       await UserRole.create({ UserId: user.id, RoleId: role.id })
     }
+  }
+
+  async getUserRoles(userId: number) {
+    // Находим все записи таблицы UserRole, связанные с данным userId
+    const userRoles = await UserRole.findAll({ where: { UserId: userId } })
+
+    // Получаем массив ролей пользователя, используя их идентификаторы
+    const roleIds = userRoles.map((userRole: any) => userRole.RoleId)
+
+    const roles = await Role.findAll({
+      where: { id: roleIds },
+    })
+
+    return roles
   }
 }
 

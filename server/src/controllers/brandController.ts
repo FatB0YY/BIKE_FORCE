@@ -7,7 +7,6 @@ class BrandController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { name } = req.body
-      console.log('name', name)
       const brand = await brandService.create(name)
 
       return res.json(brand)
@@ -15,6 +14,7 @@ class BrandController {
       next(error)
     }
   }
+
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const brands = await Brand.findAll()
