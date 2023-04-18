@@ -6,7 +6,13 @@ import { Model } from 'sequelize'
 
 class RoleService {
   async getRolesFromDb(roles: IRole[]) {
-    const rolesDb = await Role.findAll({ where: { id: roles.map((role) => role.id) } })
+    // находим роли в бд по value и id
+    const rolesDb = await Role.findAll({
+      where: {
+        id: roles.map((role) => role.id),
+        value: roles.map((role) => role.value),
+      },
+    })
 
     if (!rolesDb) {
       throw ApiError.BadRequest('Нет ролей!')
@@ -33,11 +39,16 @@ class RoleService {
   }
 
   async addRole(user: any, roles: IRole[]) {
-    // Проверяем наличие ролей в базе данных
-    const dbRoles = await Role.findAll({ where: { id: roles.map((role) => role.id) } })
+    // находим роли в бд по value и id
+    const rolesDb = await Role.findAll({
+      where: {
+        id: roles.map((role) => role.id),
+        value: roles.map((role) => role.value),
+      },
+    })
 
-    if (dbRoles.length !== roles.length) {
-      const missingRoles = roles.filter((role) => !dbRoles.find((dbRole: any) => dbRole.id === role.id))
+    if (rolesDb.length !== roles.length) {
+      const missingRoles = roles.filter((role) => !rolesDb.find((dbRole: any) => dbRole.id === role.id))
 
       throw ApiError.BadRequest(`Роли ${missingRoles.map((role) => role.value).join(', ')} не найдены в базе данных`)
     }

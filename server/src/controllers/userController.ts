@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { IRequestWithUser } from '../models/IUser.js'
+import { IRequestWithUser, IUserAttributes } from '../models/IUser.js'
 import { Basket, User } from '../models/models.js'
 import userService from '../services/userService.js'
 import { IRole } from '../models/IRole.js'
 import ApiError from '../error/ApiError.js'
+import UserDTO from '../dtos/userDto.js'
 
 class UserController {
   async registration(req: Request, res: Response, next: NextFunction) {
@@ -93,7 +94,9 @@ class UserController {
         throw ApiError.BadRequest('Пользователь не найден')
       }
 
-      return res.json(updatedUser)
+      const user = new UserDTO(updatedUser as unknown as IUserAttributes)
+
+      return res.json(user)
     } catch (error) {
       next(error)
     }

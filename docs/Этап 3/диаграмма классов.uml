@@ -1,0 +1,128 @@
+@startuml
+
+class UserController
+{
+    + registration(req, res, next)
+    + login(req, res, next)
+    + logout(req, res, next)
+    + refresh(req, res, next)
+    + getUsers(req, res, next)
+    + ban(req, res, next)
+}
+
+class RoleController
+{
+    + create(req, res, next)
+    + addRole(req, res, next)
+    + getAll(req, res, next)
+    + getRoleByName(req, res, next)
+    + getUserRoles(req, res, next)
+}
+
+class ProductController
+{
+    + create(req, res, next)
+    + getAll(req, res, next)
+    + getOne(req, res, next)
+    + delete(req, res, next)
+}
+
+class CategoryController {
+    + create(req, res, next)
+    + getAll(req, res, next)
+    + delete(req, res, next)
+}
+
+class BrandController 
+{
+    + create(req, res, next)
+    + getAll(req, res, next)
+    + delete(req, res, next)
+}
+
+class ApiError
+{
+    + BadRequest(message: String)
+    + badValidation(errors: unknown[])
+    + unauthorized()
+    + tokenExpiredError()
+    + jsonWebTokenError()
+    + forbiddenError()
+    + internalError()
+}
+
+class UserDTO 
+{
+ - id: Number
+ - email: String
+ - password: String
+ - isActive: Boolean
+ - isBan: Boolean
+ - banReason: String
+}
+
+class UserService
+{
+    + registration(email: string, password: string, roles: IRole[])
+    + login(email: string, password: string)
+    + logout(refreshToken: string)
+    + refresh(refreshToken: string)
+    + getAllUsers()
+}
+
+class TokenService
+{
+    +  generateTokens(payload: UserDTO) 
+    + saveToken(userId: number, refreshToken: string) 
+    + removeToken(refreshToken: string) 
+    + findToken(refreshToken: string) 
+    + validateAccessToken(token: string)
+    + validateRefreshToken(token: string)
+}
+
+class RoleService
+{
+    + getRolesFromDb(roles: IRole[])
+    + saveUserRoleTable(rolesDb: Model[], user: IUserAttributes)
+    + addRole(user: any, roles: IRole[]) 
+    + getUserRoles(userId: number) 
+}
+
+class CategoryService
+{
+    + create(name: string)
+}
+
+class BrandService
+{
+    + create(name: string)
+}
+
+
+UserController .. UserService
+RoleController .. RoleService
+CategoryController .. CategoryService
+BrandController .. BrandService
+
+UserService .. TokenService
+UserController .. UserDTO
+TokenService .. UserDTO
+
+UserController .. ApiError
+RoleController .. ApiError
+CategoryController .. ApiError
+BrandController .. ApiError
+ProductController .. ApiError
+
+
+
+
+
+
+
+
+
+
+
+
+@enduml
