@@ -2,18 +2,22 @@ import { Request, Response, NextFunction } from 'express'
 import ApiError from '../error/ApiError.js'
 import { Role, User } from '../models/models.js'
 import roleService from '../services/roleService.js'
+import UserDTO from '../dtos/userDto.js'
+import { IUserAttributes } from '../models/IUser.js'
 
 class RoleController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { value, description } = req.body
 
+      console.log('description', description)
+
       const roleCandidate = await Role.findOne({
         where: { value },
       })
 
       if (roleCandidate) {
-        throw ApiError.BadRequest(`Продукт ${value} уже существует`)
+        throw ApiError.BadRequest(`Роль ${value} уже существует`)
       }
 
       const role = await Role.create({
@@ -40,7 +44,9 @@ class RoleController {
 
       await roleService.addRole(user, roles)
 
-      return res.json(user)
+      const userDto = new UserDTO(user as unknown as IUserAttributes)
+
+      return res.json(userDto)
     } catch (error) {
       next(error)
     }

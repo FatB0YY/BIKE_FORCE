@@ -55,7 +55,11 @@ class RoleService {
 
     // Добавляем роли для пользователя
     for (const role of roles) {
-      await UserRole.create({ UserId: user.id, RoleId: role.id })
+      const roleCandidate = await UserRole.findOne({ where: { UserId: user.id, RoleId: role.id } })
+
+      if (!roleCandidate) {
+        await UserRole.create({ UserId: user.id, RoleId: role.id })
+      }
     }
   }
 
