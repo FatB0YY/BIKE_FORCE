@@ -1,0 +1,78 @@
+table {
+  margin: 0 auto;
+  border-spacing: 0;
+  border: 1px solid black;
+  width: 1200px;
+  tr {
+    :last-child {
+      td {
+        border-bottom: 0;
+      }
+    }
+  }
+
+  th,
+  td {
+    margin: 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+
+    :last-child {
+      border-right: 0;
+    }
+  }
+}
+thead {
+  background-color: #ffc200;
+}
+
+.btns {
+  margin: 20px 0 10px 36px;
+  width: 250px;
+  display: flex;
+  justify-content: space-between;
+  &__delete,
+  &__add {
+    width: 100px;
+    height: 25px;
+    cursor: pointer;
+  }
+}
+
+.pagination {
+  margin: 10px 0 0 36px;
+}
+
+.table {
+  &__column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    &-img {
+      width: 100%;
+    }
+  }
+}
+
+table .toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+th:nth-child(5) > div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+}
+
+tbody > tr > td > div {
+  display: flex;
+  justify-content: center;
+}
+
+tbody > tr > td {
+  text-align: center;
+}
+
