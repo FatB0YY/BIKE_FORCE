@@ -1,0 +1,55 @@
+version: '3'
+services:
+  server:
+    build: ./server
+    container_name: BIKE_FORCE-server
+    command: npm run start
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    environment:
+      - PORT=8080
+      - DB_NAME=BIKE_FORCE
+      - DB_USER=postgres
+      - DB_PASSWORD=root
+      - DB_HOST=localhost
+      - DB_PORT=5432
+      - JWT_ACCESS_SECRET=437FvlrIM833F9SvwCE5
+      - JWT_REFRESH_SECRET=rfme737gsHDhfu48Yhd7
+      - CLIENT_URL=http://localhost:3000
+      - ADMIN_PASSWORD=12345678
+      - ADMIN_EMAIL=admin@mail.ru
+    depends_on:
+      - api_db
+    networks:
+      - BIKE_FORCE-network
+
+  api_db:
+    image: postgres:15
+    container_name: BIKE_FORCE-api_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - BIKE_FORCE-network
+
+  # убедиться что порт 80 свободен!
+  # nginx:
+  #   image: nginx:stable
+  #   container_name: BIKE_FORCE-nginx
+  #   ports:
+  #    - "80:80"
+  #   volumes:
+  #     - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
+  #   depends_on:
+  #     - frontend
+  #     - server
+  #     - auth
+
+volumes:
+  postgres-data:
+
+networks:
+  BIKE_FORCE-network:
+    driver: bridge
+# docker-compose up --build
+# docker exec -t NAME_CONTAINER sh

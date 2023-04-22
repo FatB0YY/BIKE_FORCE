@@ -4,6 +4,7 @@ import checkRoleMiddleware from '../middleware/checkRoleMiddleware.js'
 import { UserRoleAdmin } from '../models/IUser.js'
 import roleValidation from '../validation/roleValidation.js'
 import validateMiddleware from '../error/validateRequestSchema.js'
+import authCheckMiddleware from '../middleware/authMiddleware.js'
 
 const router = Router()
 

@@ -5,7 +5,7 @@ const loginValidation = [
     .trim()
     .exists({ checkFalsy: true, checkNull: true })
     .withMessage('Обязательное поле!')
-    .isLowercase()
+    .toLowerCase()
     .isEmail()
     .withMessage('Некорректный Email'),
   body('password')

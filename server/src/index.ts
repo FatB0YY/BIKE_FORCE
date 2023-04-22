@@ -36,6 +36,36 @@ const start = async () => {
     await sequelize.authenticate()
     await sequelize.sync()
 
+    // Проверяем наличие роли ADMIN
+    const adminRole = await model.Role.findOne({ where: { name: 'ADMIN' } })
+    if (!adminRole) {
+      // Если роли нет, то добавляем ее
+      await model.Role.create({ name: 'ADMIN', description: 'Администратор' })
+      console.log('Role ADMIN has been created')
+    }
+
+    // Проверяем наличие пользователей
+    const users = await model.User.findAll()
+    if (users.length === 0) {
+      // Если пользователей нет, то добавляем нового пользователя с ролью ADMIN
+      const password = process.env.ADMIN_PASSWORD // Получаем пароль из .env файла
+      const email = process.env.ADMIN_EMAIL // Получаем почту из .env файла
+
+      await model.User.create({
+        id: 1,
+        email,
+        password,
+      })
+
+      // Связываем пользователя с ролью ADMIN
+      await model.UserRole.create({
+        id: 1,
+        UserId: 1,
+        RoleId: 1,
+      })
+      console.log('Admin user has been created')
+    }
+
     app.listen(PORT, () => {
       console.log(`Server is running on port: ${PORT}`)
     })
