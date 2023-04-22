@@ -6,13 +6,13 @@ services:
     command: npm run start
     restart: unless-stopped
     ports:
-      - '8080:8080'
+      - '4000:4000'
     environment:
-      - PORT=8080
+      - PORT=4000
       - DB_NAME=BIKE_FORCE
       - DB_USER=postgres
       - DB_PASSWORD=root
-      - DB_HOST=localhost
+      - DB_HOST=server_db
       - DB_PORT=5432
       - JWT_ACCESS_SECRET=437FvlrIM833F9SvwCE5
       - JWT_REFRESH_SECRET=rfme737gsHDhfu48Yhd7
@@ -20,15 +20,35 @@ services:
       - ADMIN_PASSWORD=12345678
       - ADMIN_EMAIL=admin@mail.ru
     depends_on:
-      - api_db
+      - server_db
+      - pgadmin
     networks:
       - BIKE_FORCE-network
 
-  api_db:
+  server_db:
     image: postgres:15
-    container_name: BIKE_FORCE-api_db
+    container_name: BIKE_FORCE-server_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=BIKE_FORCE
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - BIKE_FORCE-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: BIKE_FORCE-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@mail.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - server_db
     networks:
       - BIKE_FORCE-network
 
@@ -47,6 +67,7 @@ services:
 
 volumes:
   postgres-data:
+  pgadmin_data:
 
 networks:
   BIKE_FORCE-network:

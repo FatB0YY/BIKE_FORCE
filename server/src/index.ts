@@ -37,10 +37,10 @@ const start = async () => {
     await sequelize.sync()
 
     // Проверяем наличие роли ADMIN
-    const adminRole = await model.Role.findOne({ where: { name: 'ADMIN' } })
+    const adminRole = await model.Role.findOne({ where: { value: 'ADMIN' } })
     if (!adminRole) {
       // Если роли нет, то добавляем ее
-      await model.Role.create({ name: 'ADMIN', description: 'Администратор' })
+      await model.Role.create({ value: 'ADMIN', description: 'Администратор' })
       console.log('Role ADMIN has been created')
     }
 
