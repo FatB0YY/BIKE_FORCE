@@ -12,6 +12,7 @@ import logger from './logger/index.js'
 import fileDirName from './utils/fileDirName.js'
 import formData from 'express-form-data'
 import sequelize from './db.js'
+import bcrypt from 'bcrypt'
 
 const { __dirname, __filename } = fileDirName(import.meta)
 const app: Express = express()
@@ -51,10 +52,14 @@ const start = async () => {
       const password = process.env.ADMIN_PASSWORD // Получаем пароль из .env файла
       const email = process.env.ADMIN_EMAIL // Получаем почту из .env файла
 
+      // bcrypt
+      const salt = await bcrypt.genSalt()
+      const hashPassword = await bcrypt.hash(password.toString(), salt)
+
       await model.User.create({
         id: 1,
         email,
-        password,
+        password: hashPassword,
       })
 
       // Связываем пользователя с ролью ADMIN
