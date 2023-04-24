@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Table from '../table/Table'
@@ -23,9 +23,9 @@ const ListProducts = ({ setModalS }) => {
   filterGreaterThan.autoRemove = (val) => typeof val !== 'number'
 
   useEffect(() => {
-    request('http://localhost:3001/products')
+ /*    request('http://localhost:3001/products')
       .then((data) => dispatch(productsFetched(data)))
-      .catch(() => dispatch(productsFetchingError()))
+      .catch(() => dispatch(productsFetchingError())) */
   }, [])
 
   const columns = useMemo(() => [

@@ -1,25 +1,32 @@
-import Menu from '../menu/Menu'
-import ListProducts from '../listProducts/ListProducts'
-import ModalAddProduct from '../modalAddProduct/ModalAddProduct'
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import { useState } from 'react'
+
+import Menu from '../menu/Menu'
+import ModalAddProduct from '../modalAddProduct/ModalAddProduct'
 import './app.scss'
 
-const App = () => {
-  const [modalS, setModalS] = useState(false)
-  return (
-    <>
-      <ModalAddProduct
-        active={modalS}
-        setModalS={setModalS}
-      />
-      <div className='app'>
-        <Menu />
+import MainPage from '../../pages/mainPage'
+import BrandPage from '../../pages/brandPage'
+import CategoryPage from '../../pages/categoryPage'
 
+const App = () => {
+
+  const [modalS, setModalS] = useState(false)
+
+  return (
+    <Router>
+      <div className='app'>
+        <Menu /> 
         <main className='main'>
-          <ListProducts setModalS={setModalS} />
+        <ModalAddProduct active={modalS} setModalS={setModalS}/>
+        <Routes>
+          <Route path='/' element={<MainPage/>}/>
+          <Route path='/brands' element={<BrandPage/>}/>
+          <Route path='/categories' element={<CategoryPage/>}/>
+        </Routes>
         </main>
       </div>
-    </>
+    </Router>
   )
 }
 

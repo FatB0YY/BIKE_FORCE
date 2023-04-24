@@ -36,3 +36,10 @@ export const modalToggle = () => {
     type: 'MODAL_TOGGLE',
   }
 }
+
+export const brandsAdd = (brand) => {
+  return {
+    type: 'BRAND_ADD',
+    payload: brand
+  }
+}

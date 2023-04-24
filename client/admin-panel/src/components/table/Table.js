@@ -24,7 +24,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 
 fuzzyTextFilterFn.autoRemove = (val) => !val
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, styles }) => {
   const dispatch = useDispatch()
   const { request } = useHttp()
 
@@ -152,7 +152,7 @@ const Table = ({ columns, data }) => {
     [request]
   )
   return (
-    <div className='table'>
+    <div className='table' >
       <div className='btns'>
         <button
           type='button'
@@ -169,7 +169,7 @@ const Table = ({ columns, data }) => {
           Добавить
         </button>
       </div>
-      <table {...getTableProps()}>
+      <table {...getTableProps()} style={styles?.table}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -215,7 +215,7 @@ const Table = ({ columns, data }) => {
           }
         </tbody>
       </table>
-      <div className='pagination'>
+      {/* <div className='pagination'>
         <button
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
@@ -273,7 +273,7 @@ const Table = ({ columns, data }) => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
     </div>
   )
 }

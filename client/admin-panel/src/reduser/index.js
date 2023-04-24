@@ -1,5 +1,6 @@
 const initialState = {
   products: [],
+  brands: [],
   ptoductsLoadingStatus: 'idle',
   modalStatus: false,
 }
@@ -40,6 +41,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         modalStatus: !state.modalStatus,
       }
+    case 'BRAND_ADD':
+        return {
+          ...state,
+          brands: action.payload,
+        }
     default:
       return state
   }

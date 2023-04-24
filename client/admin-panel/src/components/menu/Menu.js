@@ -1,11 +1,8 @@
-import { useState, useRef } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { Link, NavLink } from 'react-router-dom'
 
 import logo from '../../assets/images/logo.png'
 import product from '../../assets/images/product.svg'
 import category from '../../assets/images/category.svg'
-import information from '../../assets/images/информация.svg'
 import brands from '../../assets/images/brands.svg'
 
 import './menu.scss'
@@ -20,20 +17,13 @@ const Menu = () => {
     <nav className='menu'>   
       <ul className="menu__list">
         <li className="menu__list-item">
-          <a href="#" className="menu__link">Товары</a>
-          <img src={product} alt="" />
+          <NavLink style={({isActive}) => ({color : isActive ? '#ffffff' : 'inherit'} )} to="/" className="menu__link">товары</NavLink>
         </li>
         <li className="menu__list-item">
-          <a href="#require" className="menu__link">добавить</a>
-          <img src={brands} alt="" />
+          <NavLink style={({isActive}) => ({color : isActive ? '#ffffff' : 'inherit'} )} to="/brands" className="menu__link">бренды</NavLink>
         </li>
         <li className="menu__list-item">
-          <a href="#require" className="menu__link">добавить</a>
-          <img src={category} alt="" />
-        </li>
-        <li className="menu__list-item">
-          <a href="#" className="menu__link">добавить</a>
-          <img src={information} alt="" />
+          <NavLink style={({isActive}) => ({color : isActive ? '#ffffff' : 'inherit'} )} to="/categories" className="menu__link">категории</NavLink>
         </li>
       </ul>
     </nav>
