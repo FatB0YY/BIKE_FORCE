@@ -1,8 +1,15 @@
 const initialState = {
   products: [],
   brands: [],
+  categories: [],
   ptoductsLoadingStatus: 'idle',
   modalStatus: false,
+  boolPage: {boolCategory: false, boolBrand: false},
+  user: {},
+  roles:[],
+  isAuth: false,
+  isLoading: false,
+  toggleForm: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -44,8 +51,60 @@ const reducer = (state = initialState, action) => {
     case 'BRAND_ADD':
         return {
           ...state,
-          brands: action.payload,
+          brands: [...state.brands, action.payload,]
         }
+    case 'BRAND_DELETED':
+      const newBrandList = state.brands.filter(
+        (item) => !action.payload.includes(item.id)
+      )
+      return {
+        ...state,
+        brands: newBrandList,
+      }
+      case 'CATEGORIES_ADD':
+        return {
+          ...state,
+          categories: [...state.categories, action.payload]
+        }
+    case 'CATEGORIES_DELEED':
+      const newCategoriesList = state.brands.filter(
+        (item) => !action.payload.includes(item.id)
+      )
+      return {
+        ...state,
+        categories: newCategoriesList,
+      }
+    case 'TOGGLE_BOOL_PAGE':
+      const newObj = action.payload
+      return {
+        ...state,
+        boolPage: newObj
+      }
+    case 'SET_AUTH': 
+      return {
+        ...state,
+        isAuth: action.payload
+      }
+    case 'SET_USER':
+      return {
+        ...state,
+        user: action.payload
+      }
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload
+      }
+    case 'TOGGLE_FORM':
+      return {
+        ...state,
+        toggleForm: action.payload
+      }
+    case 'SET_ROLES':
+      return {
+        ...state,
+        roles: action.payload
+      }
     default:
       return state
   }

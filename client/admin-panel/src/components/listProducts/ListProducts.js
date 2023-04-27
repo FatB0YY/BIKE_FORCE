@@ -4,14 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import Table from '../table/Table'
 import NumberRangeColumnFilter from '../filters/numberRangeColumnFilter/NumberRangeColumnFilter'
 import SelectColumnFilter from '../filters/selectColumnFilter/SelectColumnFilter'
-import { useHttp } from '../../hooks/useHttp'
 import { productsFetched, productsFetchingError } from '../../actions'
 
 const ListProducts = ({ setModalS }) => {
   const { products } = useSelector((state) => state)
   const dispatch = useDispatch()
-
-  const { request } = useHttp()
 
   function filterGreaterThan(rows, id, filterValue) {
     return rows.filter((row) => {
@@ -72,7 +69,14 @@ const ListProducts = ({ setModalS }) => {
   return (
     <Table
       columns={columns}
-      data={products}
+      data={[ {
+        "name": "авыавыа",
+        "image": "/assets/products/velo-1.jpg",
+        "description": "авыаываы",
+        "category": "аыаыаы",
+        "price": "43",
+        "id": "72dc699a-9b91-48ce-9fcd-e3e35b093b70"
+      },]}
       setModalS={setModalS}
     />
   )

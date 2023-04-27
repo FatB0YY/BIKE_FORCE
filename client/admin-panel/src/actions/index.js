@@ -1,3 +1,4 @@
+
 export const productsFetching = () => {
   return {
     type: 'PDODUCT_FETCHING',
@@ -41,5 +42,68 @@ export const brandsAdd = (brand) => {
   return {
     type: 'BRAND_ADD',
     payload: brand
+  }
+}
+
+export const brandDeleted = (ids) => {
+  return {
+    type: 'BRAND_DELETED',
+    payload: ids,
+  }
+}
+
+export const categoriesAdd = (brand) => {
+  return {
+    type: 'CATEGORIES_ADD',
+    payload: brand
+  }
+}
+
+export const categoriesDeleted = (ids) => {
+  return {
+    type: 'CATEGORIES_DELEED',
+    payload: ids,
+  }
+}
+
+export const toggleBoolPage = (obj) => {
+  return {
+    type: 'TOGGLE_BOOL_PAGE',
+    payload: obj
+  }
+}
+
+export const setAuth = (bool) => {
+  return {
+    type: 'SET_AUTH',
+    payload: bool
+  }
+}
+
+export const setUser = (data) => {
+  return {
+    type: 'SET_USER',
+    payload: data
+  }
+}
+
+export const setLoading = (bool) => {
+  return {
+    type: 'SET_LOADING',
+    payload: bool
+  }
+}
+
+export const toggleForm = (bool) => {
+  return {
+    type: 'TOGGLE_FORM',
+    payload: bool
+  }
+}
+
+export const setRoles = (roles) => {
+  return {
+    type: 'SET_ROLES',
+    payload: roles
   }
 }

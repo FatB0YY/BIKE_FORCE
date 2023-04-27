@@ -4,13 +4,14 @@ import { brands, solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHttp } from '../../hooks/useHttp'
-import { productAdd, modalToggle } from '../../actions/index'
+import { productAdd, modalToggle, brandsAdd, categoriesAdd } from '../../actions/index'
 import './modalAddProduct.scss'
 
 // prettier-ignore
-const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
-  const { request } = useHttp()
+const ModalAddProduct = () => {
+
+  const {boolCategory, boolBrand} = useSelector(state => state.boolPage)
+  const { modalStatus } = useSelector((state) => state)
 
   const dispatch = useDispatch()
 
@@ -19,13 +20,13 @@ const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
   const [price, setPrice] = useState('')
-  const [countPropertys, setCountPropertys] = useState([])
+  const [properties, setProperties] = useState([]);
   const [nameModal, setNameModal] = useState('добавить товар')
 
   const modal = useRef(null)
   const exit = useRef(null)
-
-  const { modalStatus } = useSelector((state) => state)
+  const iconPath = useRef(null);
+  const iconSvg = useRef(null);
   
   const handleSubmit = (e) => {
   
@@ -36,17 +37,7 @@ const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
       description,
       category,
       price,
-      id: uuidv4(),
     }
-
-    request(
-      'http://localhost:3001/products',
-      'POST',
-      JSON.stringify(newProduct)
-    )
-      .then((res) => console.log(res, 'Отправка успешна'))
-      .then(dispatch(productAdd(newProduct)))
-      .catch((err) => console.log(err))
 
     setName('')
     setImage('')
@@ -55,31 +46,35 @@ const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
     setPrice('')
   }
 
+  const handleSubmitBrandOrCaterory = (e) => {
+    e.preventDefault()
+    const newProduct = {
+      name,
+  }
+ /*    if(boolCategory) {
+      request('http://localhost:4000/api/category/','POST',JSON.stringify(newProduct),  {
+          'Content-type': 'application/json; charset=UTF-8', 
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG1haWwucnUiLCJpZCI6MSwiYmFuUmVhc29uIjpudWxsLCJpc0FjdGl2ZSI6dHJ1ZSwiaXNCYW4iOmZhbHNlLCJpYXQiOjE2ODIzMzE0ODIsImV4cCI6MTY4MjMzMjM4Mn0.QCdX2coc0jipedZnR_0uZDla-rtiAPT3TuvUSp-60t4'
+        })
+        request('http://localhost:4000/api/category/','GET', null, {
+          'Content-type': 'application/json; charset=UTF-8', 
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG1haWwucnUiLCJpZCI6MSwiYmFuUmVhc29uIjpudWxsLCJpc0FjdGl2ZSI6dHJ1ZSwiaXNCYW4iOmZhbHNlLCJpYXQiOjE2ODIzMzE0ODIsImV4cCI6MTY4MjMzMjM4Mn0.QCdX2coc0jipedZnR_0uZDla-rtiAPT3TuvUSp-60t4'
+        }).then(data => dispatch(categoriesAdd(data))).catch(e => console.log(e))
+
+    } else if(boolBrand) {
+      request('http://localhost:4000/api/brand/','POST',JSON.stringify(newProduct),  {
+        'Content-type': 'application/json; charset=UTF-8', 
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQG1haWwucnUiLCJpZCI6MSwiYmFuUmVhc29uIjpudWxsLCJpc0FjdGl2ZSI6dHJ1ZSwiaXNCYW4iOmZhbHNlLCJpYXQiOjE2ODIzMzE0ODIsImV4cCI6MTY4MjMzMjM4Mn0.QCdX2coc0jipedZnR_0uZDla-rtiAPT3TuvUSp-60t4'
+      })
+    } */
+    
+    setName('')
+}
+
   const hidden = () => {
     dispatch(modalToggle())
-    console.log(modalStatus)
   }
-
-  const renderPropertys = (id) => {
-    console.log(id)
-    return (
-      <div className="modal__body-group-property" key={id}>
-        <input type="text" placeholder="Введите название" />
-        <input type="text" placeholder="Введите описание" />
-        <button onClick={() => handleRemoveProperty(id)}>Удалить</button>
-      </div>
-    );
-  };
   
-  const handleClick = () => {
-    const newCountPropertys = [...countPropertys, renderPropertys(uuidv4())];
-    setCountPropertys(newCountPropertys);
-  };
-  
-  const handleRemoveProperty = (id) => {
-    const updatedProperties = countPropertys.filter((property) => property.key !== id);
-    setCountPropertys(updatedProperties);
-  };
   // const data = {email: 'admin@mail.ru', password: '12345678'}
   // fetch('http://localhost:4000/api/user/login', {method: 'POST', body: JSON.stringify(data), headers: {
   //   'Content-type': 'application/json; charset=UTF-8',
@@ -94,22 +89,25 @@ const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
   // fetch('http://localhost:4000/api/user/login', {method: 'POST', body: JSON.stringify(data), headers: {
   //   'Content-type': 'application/json; charset=UTF-8',
   // },}).then(res => res.json()).then(data => console.log(data))
-  useEffect(() => {
-    console.log(countPropertys)
-  },[countPropertys])
 
-  const placeholderProp = () => {
-    if(boolCategory) {
-      setNameModal('Добавить категорию')
-    } else if(boolBrand) {
-      setNameModal('Добавить бренд')
-    } 
+  function handleAddProperty(e) {
+    e.preventDefault();
+    const newId = properties.length + 1;
+    setProperties([...properties, { id: newId }]);
+  }
+
+  function handleRemoveProperty(id) {
+    setProperties(properties.filter((property) => property.id !== id));
   }
 
   useEffect(() => {
-    placeholderProp()
-  },[])
-
+    if(boolCategory) {
+      setNameModal('Категория')
+    } else if(boolBrand) {
+      setNameModal('Бренд')
+    } 
+  },[boolCategory, boolBrand])
+    
   const view = () => {
     if(boolBrand || boolCategory) {
       return (
@@ -117,26 +115,26 @@ const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
         className={modalStatus ? 'modal' : 'modal hiiden'} 
         ref={modal}
         onClick={(e) => {
-          if(e.target === modal.current || e.target === exit.current) {
+          if(e.target === modal.current || e.target.parentNode === exit.current || e.target.parentNode === iconPath.current) {
             hidden()
           }
         }}>  
-          <div 
-          className='modal__exit'>
-            <FontAwesomeIcon
-              icon={solid('xmark')}
-              className='modal__exit-icon'
-              style={{ color: '#ffc200' }}
-              ref={exit}
-            />
-          </div>
           <div className='modal__content'
             onClick={e => e.stopPropagation()}>
             <div className='modal__header'>
               <h2>{nameModal}</h2>
+              <div 
+          className='modal__exit'  ref={exit}>
+            <FontAwesomeIcon
+              icon={solid('xmark')}
+              className='modal__exit-icon'
+              style={{ color: '#ffc200' }}
+              ref={iconPath}
+            />
+          </div>
             </div>
             <div className='modal__body'>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmitBrandOrCaterory}>
                 <div className='modal__body-group'>
                   <input
                     type='text'
@@ -148,7 +146,7 @@ const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
                   />
                 </div>
                 <div className="btn__block">
-                  <button type='submit' className='modal__body-group-btn'>{nameModal}</button>
+                  <button type='submit' className='modal__body-group-btn'>Добавить {nameModal}</button>
                 </div>
               </form>
             </div>
@@ -161,67 +159,60 @@ const ModalAddProduct = ({boolCategory = false, boolBrand = false}) => {
         className={modalStatus ? 'modal' : 'modal hiiden'} 
         ref={modal}
         onClick={(e) => {
-          if(e.target === modal.current || e.target === exit.current) {
+          if(e.target === modal.current || e.target.parentNode === exit.current || e.target.parentNode === iconPath.current) {
             hidden()
           }
         }}>  
-          <div 
-          className='modal__exit'>
-            <FontAwesomeIcon
-              icon={solid('xmark')}
-              className='modal__exit-icon'
-              style={{ color: '#ffc200' }}
-              ref={exit}
-            />
-          </div>
-          <div className='modal__content'
-            onClick={e => e.stopPropagation()}>
+          <div className='modal__content'>
             <div className='modal__header'>
-              <h2>Добавить {nameModal}</h2>
+              <h2>Товар</h2>
+              <div className='modal__exit' ref={exit}>
+                <FontAwesomeIcon
+                  icon={solid('xmark')}
+                  className='modal__exit-icon'
+                  style={{ color: '#000000' }}
+                  ref={iconPath}
+                />
+            </div>
             </div>
             <div className='modal__body'>
               <form onSubmit={handleSubmit}>
+              <div className="modal__body-group-select">
+                  <select>
+                    <option value="apple">Apple</option>
+                    <option value="banana">Banana</option>
+                    <option value="orange">Orange</option>
+                    <option value="grape">Grape</option>
+                  </select>
+                  </div> 
                 <div className='modal__body-group'>
                   <input
                     type='text'
                     id={nameModal}
-                    value={nameModal}
+                    value={name}
                     required
                     onChange={(e) => setName(e.target.value)}
-                    placeholder={`Введите название ${nameModal}`}
+                    placeholder={`Введите название`}
                   />
                 </div>
-                <div className='modal__body-group'>
+                <div className='modal__body-group-img'>
                   <input
                     type='file'
                     id='photo'
                     onChange={(e) => setImage(e.target.files[0])}
                   />
                 </div>
-                <div className='modal__body-group'>
-                  {/* <input
-                    type='text'
-                    id='category'
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    required
-                  /> */}
-                       {/* <select>
-                    <option value="apple">Apple</option>
-                    <option value="banana">Banana</option>
-                    <option value="orange">Orange</option>
-                    <option value="grape">Grape</option>
-                </select> */}
-                <button className='modal__body-group-btn_descr'onClick={handleClick}>Добавить свойство</button>
-                {countPropertys}
+                <div className='modal__body-group-btn_prop'>
+                  <button onClick={(e) => handleAddProperty(e)}>Добавить свойство</button>
                 </div>
-                <div className='modal__body-group'>
-                  <input
-                    id='description'
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  ></input>
+                <div className='modal__body-group-props'>
+               {properties.map((property) => (
+                  <div className="modal__body-group-property" key={property.id} id={property.id}>
+                    <input type="text" placeholder="Введите название" />
+                    <input type="text" placeholder="Введите описание" />
+                    <button onClick={() => handleRemoveProperty(property.id)}>Удалить</button>
+                  </div>
+                ))}
                 </div>
                 <div className='modal__body-group'>
                   <input

@@ -1,13 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import Table from '../table/Table'
 
-const AddCategories = () => {
-
-  const {category, setCategory} = useState(null)
-
-  const {categories} = useSelector(state => state);
+const AddUsers = () => {
+  const {users, roles} = useSelector(state => state);
 
   function filterGreaterThan(rows, id, filterValue) {
     return rows.filter((row) => {
@@ -18,11 +15,10 @@ const AddCategories = () => {
 
   filterGreaterThan.autoRemove = (val) => typeof val !== 'number'
 
-
   const columns = useMemo(() => [
     {
-      Header: 'Название категория',
-      accessor: 'name',
+      Header: 'id',
+      accessor: 'id',
       filter: 'fuzzyText',
     },
   ])
@@ -37,10 +33,10 @@ const AddCategories = () => {
     return (
       <Table 
       columns={columns}
-      data={categories}
+      data={users}
       styles={tableStyles}
-      pages={{boolCategory: true, boolBrand: false}}/>
+      />
     )
 }
 
-export default AddCategories;
+export default AddUsers;

@@ -1,7 +1,10 @@
 import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
+
 import Table from '../table/Table'
 
 const AddBrands = () => {
+  const {brands} = useSelector(state => state);
 
   function filterGreaterThan(rows, id, filterValue) {
     return rows.filter((row) => {
@@ -30,10 +33,9 @@ const AddBrands = () => {
     return (
       <Table 
       columns={columns}
-      data={[{
-        name: 'apple'
-      }]}
-      styles={tableStyles}/>
+      data={brands}
+      styles={tableStyles}
+      />
     )
 }
 

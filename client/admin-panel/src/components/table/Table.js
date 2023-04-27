@@ -1,8 +1,7 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import { matchSorter } from 'match-sorter'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHttp } from '../../hooks/useHttp'
-import { productDeleted, modalToggle } from '../../actions'
+import { productDeleted, modalToggle} from '../../actions'
 import IndeterminateCheckbox from '../indeterminateCheckbox/IndeterminateCheckbox'
 
 import {
@@ -24,9 +23,8 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 
 fuzzyTextFilterFn.autoRemove = (val) => !val
 
-const Table = ({ columns, data, styles }) => {
+const Table = ({ columns, data, styles, pages }) => {
   const dispatch = useDispatch()
-  const { request } = useHttp()
 
   const filterTypes = useMemo(
     () => ({
@@ -134,10 +132,10 @@ const Table = ({ columns, data, styles }) => {
   const handleDeleteSelectedRows = () => {
     const selectedRows = selectedFlatRows.map((row) => row.original.id)
     console.log(selectedRows)
-    onDelete(selectedRows)
+    /* onDelete(selectedRows) */
   }
 
-  const onDelete = useCallback(
+ /*  const onDelete = useCallback(
     (ids) => {
       const deleteRequests = ids.map((id) => {
         return request(`http://localhost:3001/products/${id}`, 'DELETE')
@@ -150,7 +148,7 @@ const Table = ({ columns, data, styles }) => {
       // eslint-disable-next-line
     },
     [request]
-  )
+  ) */
   return (
     <div className='table' >
       <div className='btns'>

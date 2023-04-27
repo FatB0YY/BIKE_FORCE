@@ -1,7 +1,6 @@
 table {
   margin: 0 0 0 35px;
   border-spacing: 0;
-  border: 1px solid black;
   width: 1200px;
   tr {
     :last-child {
@@ -15,16 +14,20 @@ table {
   td {
     margin: 0;
     padding: 0.5rem;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-
+    border: 1px solid rgb(174, 174, 174);
     :last-child {
       border-right: 0;
+    }
+    input {
+      border: 0;
+    }
+    select {
+      border: 0;
     }
   }
 }
 thead {
-  background-color: #ffc200;
+  background-color:rgba(0, 0, 0, 0.1)
 }
 
 .btns {
@@ -34,9 +37,20 @@ thead {
   justify-content: space-between;
   &__delete,
   &__add {
-    width: 100px;
-    height: 25px;
+    background-color: white;
+    font-size: 18px;
+    width: 120px;
+    height: 35px;
+    font-weight: 500;
+    border: 0px solid;
     cursor: pointer;
+    color: black;
+    border: 2px solid #ffd754ec;
+    box-shadow:0px 0px 0.5px 1px #f6f3f3;
+    &:hover {
+      background-color: #ffd754ec;
+      transition: all 0.35s ease 0s;
+    }
   }
 }
 
