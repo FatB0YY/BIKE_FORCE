@@ -4,13 +4,20 @@ import path from 'path'
 import { Product, ProductInfo } from '../models/models.js'
 import ApiError from '../error/ApiError.js'
 import fileDirName from '../utils/fileDirName.js'
+import fs from 'fs'
 
 const { __dirname, __filename } = fileDirName(import.meta)
 
 class ProductController {
   async create(req: any, res: Response, next: NextFunction) {
     try {
-      let { name, price, BrandId, CategoryId, info } = req.body
+      let { name, price, BrandId, CategoryId, info, count } = req.body
+
+      if (!req.files) {
+        throw ApiError.BadRequest('req.files is undefined')
+      }
+
+      const img = req.files.img
 
       const productCandidate = await Product.findOne({
         where: { name },
@@ -20,8 +27,14 @@ class ProductController {
         throw ApiError.BadRequest(`Продукт ${name} уже существует`)
       }
 
-      // исправить тип
-      const { img } = req.files
+      const dir = path.join(__dirname, '..', 'static')
+
+      fs.mkdir(dir, { recursive: true }, (err) => {
+        if (err) {
+          throw ApiError.internalError('Ошибка при создании папки static', [err])
+        }
+        console.log(`Directory ${dir} created successfully`)
+      })
 
       // уникальное имя
       let fileName = uuidv4() + '.jpg'
@@ -34,6 +47,7 @@ class ProductController {
         BrandId,
         CategoryId,
         img: fileName,
+        count,
       })) as any
 
       if (info) {
@@ -42,7 +56,7 @@ class ProductController {
           ProductInfo.create({
             title: i.title,
             description: i.description,
-            DeviceId: product.id,
+            ProductId: product.id,
           }),
         )
       }

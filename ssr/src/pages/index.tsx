@@ -4,6 +4,7 @@ import MainLayout from '@/components/MainLayout'
 import Pagination from '@/components/Pagination'
 import ProductList from '@/components/ProductList'
 import Sidebar from '@/components/Sidebar'
+import Tabs from '@/components/Tabs'
 import UserService from '@/services/UserService'
 import { IProductsPageProps } from '@/types'
 import { NextPageContext } from 'next'
@@ -36,6 +37,7 @@ const HomePage = ({ products: serverProducts }: IProductsPageProps) => {
   return (
     <MainLayout title='Home Page'>
       <Hero />
+      <Tabs />
       <ProductList products={products} />
       <Pagination />
       <Sidebar />
@@ -52,6 +54,7 @@ HomePage.getInitialProps = async (ctx: NextPageContext) => {
 
   const response = await UserService.getAllProduct(null, null, 4, 1)
   const products = response.data.rows
+
   return { products }
 }
 

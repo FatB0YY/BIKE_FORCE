@@ -11,7 +11,7 @@ const ProductItem = ({ product }: IProductPropsId) => {
   const category = 'CATEGORY'
   const dispatch = useAppDispatch()
 
-  const { id, img, name, count, price, isActive } = product
+  const { id, img, name, price } = product
 
   return (
     <div>
