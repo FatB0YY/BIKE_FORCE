@@ -1,19 +1,23 @@
 import Loader from '@/components/Loader'
 import MainLayout from '@/components/MainLayout'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux'
+import { addToCart } from '@/redux/reducers/UserSlice'
+import UserService from '@/services/UserService'
 import { IProduct, IProductPropsId, ProductNextPageContext } from '@/types'
-import Router, { NextRouter, useRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router'
 import React from 'react'
 import { useState, useEffect } from 'react'
 
 const ProductDetails = ({ product: serverProduct }: IProductPropsId) => {
   const [product, setProduct] = useState(serverProduct)
+  const dispatch = useAppDispatch()
   const router: NextRouter = useRouter()
+  const { cart } = useAppSelector((state) => state.UserReducer)
 
   useEffect(() => {
     async function load() {
-      const response = await fetch(`https://fakestoreapi.com/products/${router.query.id}`)
-      const data: IProduct = await response.json()
-      setProduct(data)
+      const response = await UserService.getOneProduct(Number(router.query.id))
+      setProduct(response.data)
     }
 
     if (!serverProduct) {
@@ -31,8 +35,42 @@ const ProductDetails = ({ product: serverProduct }: IProductPropsId) => {
 
   return (
     <MainLayout title={product.name}>
-      <div>Product Details Page {product.id}</div>
-      <button onClick={() => Router.push('/')}>Go back to home</button>
+      <section className='pt-32 pb-12 lg:py-32 h-screen flex items-center'>
+        <div className='container mx-auto'>
+          {/* image & wrapper */}
+          <div className='flex flex-col lg:flex-row items-center'>
+            {/* image */}
+            <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
+              <img
+                className='max-w-[200px] lg:max-w-sm'
+                src={product.img}
+                alt={product.name}
+              />
+            </div>
+            {/* text */}
+            <div className='flex-1 text-center lg:text-left'>
+              <h1 className='text-[26px] font-medium mb-2 max-2-[450px] mx-auto lg:mx-0'>{product.name}</h1>
+              <div className='text-xl text-red-500 font-medium mb-6 '>$ {product.price}</div>
+
+              {product.info?.map((item) => {
+                return (
+                  <div className='flex items-center justify-between'>
+                    <span className='mb-8'>{item.title}: </span>
+                    <span className='mb-8'>{item.description}</span>
+                  </div>
+                )
+              })}
+
+              <button
+                onClick={() => dispatch(addToCart({ product, id: product.id }))}
+                className='bg-primary hover:bg-gray-800 transition-all py-4 px-8 text-white'
+              >
+                Add to cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </MainLayout>
   )
 }
@@ -44,8 +82,9 @@ ProductDetails.getInitialProps = async (ctx: ProductNextPageContext) => {
     }
   }
 
-  const response = await fetch(`https://fakestoreapi.com/products/${ctx.query.id}`)
-  const product: IProduct = await response.json()
+  const response = await UserService.getOneProduct(Number(ctx.query.id))
+  const product = response.data
+
   return { product }
 }
 

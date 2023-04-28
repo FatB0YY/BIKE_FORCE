@@ -2,6 +2,9 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import '@fortawesome/fontawesome-svg-core/styles.css' // импортируйте стили Font Awesome
 import { config } from '@fortawesome/fontawesome-svg-core'
+import { Provider } from 'react-redux'
+import { setupStore } from '../redux/store'
+const store = setupStore()
 
 config.autoAddCss = false // Отключите автоматическое добавление стилей CSS
 
@@ -36,7 +39,9 @@ const myFont = localFont({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={`${myFont.className} font-sans`}>
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     </div>
   )
 }

@@ -2,14 +2,16 @@ import React from 'react'
 import { faPlus, faEye } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
-import { IProductPropsId } from '@/types'
 import Image from 'next/image'
+import { useAppDispatch } from '@/hooks/redux'
+import { addToCart } from '@/redux/reducers/UserSlice'
+import { IProductPropsId } from '@/types'
 
-const ProductItem = ({ product }: any) => {
+const ProductItem = ({ product }: IProductPropsId) => {
   const category = 'CATEGORY'
+  const dispatch = useAppDispatch()
 
-  // const { id, img, name, count, price, isActive } = product
-  const { title, image, price, id } = product
+  const { id, img, name, count, price, isActive } = product
 
   return (
     <div>
@@ -18,8 +20,8 @@ const ProductItem = ({ product }: any) => {
           {/* image */}
           <div className='w-[200px] mx-auto flex justify-center items-center'>
             <Image
-              src={image}
-              alt={title}
+              src={img}
+              alt={name}
               quality={100}
               width={Number(process.env.SIZE_WIDTH_PRODUCT_LIST)}
               height={Number(process.env.SIZE_HEIGHT_PRODUCT_LIST)}
@@ -29,7 +31,7 @@ const ProductItem = ({ product }: any) => {
         </div>
         {/* buttons */}
         <div className='absolute top-2 -right-11 group-hover:right-2  p-2 flex flex-col items-center justify-center gap-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300'>
-          <button>
+          <button onClick={() => dispatch(addToCart({ product, id: product.id }))}>
             <div className='flex justify-center items-center text-white w-12 h-12 bg-red-500'>
               <FontAwesomeIcon
                 icon={faPlus}
@@ -54,7 +56,7 @@ const ProductItem = ({ product }: any) => {
           href={`/product/[id]`}
           as={`/product/${id}`}
         >
-          <h2 className='font-semibold mb-1'>{title}</h2>
+          <h2 className='font-semibold mb-1'>{name}</h2>
         </Link>
 
         <div className='font-semibold'>$ {price}</div>

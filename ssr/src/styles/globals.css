@@ -7,3 +7,7 @@
     @apply font-primary text-primary;
   }
 }
+
+* {
+  box-sizing: border-box !important;
+}

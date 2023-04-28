@@ -1,8 +1,11 @@
+import Hero from '@/components/Hero'
 import Loader from '@/components/Loader'
 import MainLayout from '@/components/MainLayout'
+import Pagination from '@/components/Pagination'
 import ProductList from '@/components/ProductList'
 import Sidebar from '@/components/Sidebar'
-import { IProduct, IProductsPageProps } from '@/types'
+import UserService from '@/services/UserService'
+import { IProductsPageProps } from '@/types'
 import { NextPageContext } from 'next'
 import { useEffect, useState } from 'react'
 
@@ -11,9 +14,8 @@ const HomePage = ({ products: serverProducts }: IProductsPageProps) => {
 
   useEffect(() => {
     async function load() {
-      const response = await fetch('https://fakestoreapi.com/products')
-      const data: IProduct[] = await response.json()
-      setProducts(data)
+      const response = await UserService.getAllProduct(null, null, 4, 1)
+      setProducts(response.data.rows)
     }
 
     if (!serverProducts) {
@@ -24,6 +26,7 @@ const HomePage = ({ products: serverProducts }: IProductsPageProps) => {
   if (!products) {
     return (
       <MainLayout title='Home Page'>
+        <Hero />
         <Loader />
         <Sidebar />
       </MainLayout>
@@ -32,7 +35,9 @@ const HomePage = ({ products: serverProducts }: IProductsPageProps) => {
 
   return (
     <MainLayout title='Home Page'>
+      <Hero />
       <ProductList products={products} />
+      <Pagination />
       <Sidebar />
     </MainLayout>
   )
@@ -45,8 +50,8 @@ HomePage.getInitialProps = async (ctx: NextPageContext) => {
     }
   }
 
-  const response = await fetch('https://fakestoreapi.com/products')
-  const products: IProduct[] = await response.json()
+  const response = await UserService.getAllProduct(null, null, 4, 1)
+  const products = response.data.rows
   return { products }
 }
 
