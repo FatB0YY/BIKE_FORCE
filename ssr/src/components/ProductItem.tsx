@@ -7,8 +7,7 @@ import { useAppDispatch } from '@/hooks/redux'
 import { addToCart } from '@/redux/reducers/UserSlice'
 import { IProductPropsId } from '@/types'
 
-const ProductItem = ({ product }: IProductPropsId) => {
-  const category = 'CATEGORY'
+const ProductItem = ({ product, brand, category }: IProductPropsId) => {
   const dispatch = useAppDispatch()
 
   const { id, img, name, price } = product
@@ -20,7 +19,7 @@ const ProductItem = ({ product }: IProductPropsId) => {
           {/* image */}
           <div className='w-[200px] mx-auto flex justify-center items-center'>
             <Image
-              src={img}
+              src={`${process.env.API_URL_WITHOUT_API}${img}`}
               alt={name}
               quality={100}
               width={Number(process.env.SIZE_WIDTH_PRODUCT_LIST)}
@@ -51,7 +50,9 @@ const ProductItem = ({ product }: IProductPropsId) => {
       </div>
       {/* category title brand*/}
       <div>
-        <div className='text-sm capitalize text-gray-500 mb-1'>{category}</div>
+        <div className='text-sm capitalize text-gray-500 mb-1'>{category.name}</div>
+        <div className='text-sm capitalize text-gray-500 mb-1'>{brand.name}</div>
+
         <Link
           href={`/product/[id]`}
           as={`/product/${id}`}

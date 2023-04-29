@@ -1,9 +1,10 @@
 import Loader from '@/components/Loader'
 import MainLayout from '@/components/MainLayout'
+import Sidebar from '@/components/Sidebar'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { addToCart } from '@/redux/reducers/UserSlice'
 import UserService from '@/services/UserService'
-import { IProduct, IProductPropsId, ProductNextPageContext } from '@/types'
+import { IProductPropsId, ProductNextPageContext } from '@/types'
 import { NextRouter, useRouter } from 'next/router'
 import React from 'react'
 import { useState, useEffect } from 'react'
@@ -12,7 +13,6 @@ const ProductDetails = ({ product: serverProduct }: IProductPropsId) => {
   const [product, setProduct] = useState(serverProduct)
   const dispatch = useAppDispatch()
   const router: NextRouter = useRouter()
-  const { cart } = useAppSelector((state) => state.UserReducer)
 
   useEffect(() => {
     async function load() {
@@ -43,7 +43,7 @@ const ProductDetails = ({ product: serverProduct }: IProductPropsId) => {
             <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
               <img
                 className='max-w-[200px] lg:max-w-sm'
-                src={product.img}
+                src={`${process.env.API_URL_WITHOUT_API}${product.img}`}
                 alt={product.name}
               />
             </div>
@@ -54,7 +54,10 @@ const ProductDetails = ({ product: serverProduct }: IProductPropsId) => {
 
               {product.info?.map((item) => {
                 return (
-                  <div className='flex items-center justify-between'>
+                  <div
+                    key={item.id}
+                    className='flex items-center justify-between'
+                  >
                     <span className='mb-8'>{item.title}: </span>
                     <span className='mb-8'>{item.description}</span>
                   </div>
@@ -71,21 +74,22 @@ const ProductDetails = ({ product: serverProduct }: IProductPropsId) => {
           </div>
         </div>
       </section>
+      <Sidebar />
     </MainLayout>
   )
 }
 
-ProductDetails.getInitialProps = async (ctx: ProductNextPageContext) => {
-  if (!ctx.req) {
+export async function getServerSideProps(context: ProductNextPageContext) {
+  if (!context.req) {
     return {
       product: null,
     }
   }
 
-  const response = await UserService.getOneProduct(Number(ctx.query.id))
+  const response = await UserService.getOneProduct(Number(context.query.id))
   const product = response.data
 
-  return { product }
+  return { props: { product } }
 }
 
 export default ProductDetails

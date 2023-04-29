@@ -1,7 +1,12 @@
 import { NextPageContext } from 'next'
 
-export interface IProductsPageProps {
-  products: IProduct[]
+export interface IIndexPageProps {
+  products: {
+    rows: IProduct[]
+    count: number
+  }
+  tabsBrand: IBrand[]
+  tabsCategory: ICategory[]
 }
 
 export interface IProduct {
@@ -11,7 +16,7 @@ export interface IProduct {
   img: string
   count: number
   isActive: boolean
-  TypeId: number
+  CategoryId: number
   BrandId: number
   info?: IInfoProduct[]
 }
@@ -25,6 +30,8 @@ export interface IInfoProduct {
 
 export interface IProductPropsId {
   product: IProduct
+  brand: IBrand
+  category: ICategory
 }
 
 export interface ProductNextPageContext extends NextPageContext {
@@ -72,4 +79,10 @@ export interface IBrand {
 export interface IProductResponse {
   count: number
   rows: IProduct[]
+}
+
+export interface ITab {
+  id: number
+  name: string
+  isActive: boolean
 }

@@ -48,10 +48,6 @@ export default class UserService {
   }
 
   static async getOneProduct(id: number): Promise<AxiosResponse<IProduct>> {
-    return $api.get(`/product`, {
-      params: {
-        id,
-      },
-    })
+    return $api.get(`/product/${id}`)
   }
 }

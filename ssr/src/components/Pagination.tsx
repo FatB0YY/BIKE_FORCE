@@ -1,71 +1,33 @@
 import React from 'react'
 import PaginationItem from './PaginationItem'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { useAppSelector } from '@/hooks/redux'
 
 const Pagination = () => {
-  const pages = [1, 2, 3, 4, 5]
+  const { totalCount, page } = useAppSelector((state) => state.UserReducer)
+  const pageCount = Math.ceil(totalCount / Number(process.env.LIMIT_PRODUCT_ON_LIST)!)
+  const pages = []
+
+  for (let i = 0; i < pageCount; i++) {
+    pages.push(i + 1)
+  }
 
   return (
-    // <div>
-    //   {pages.map((page) => (
-    //     <PaginationItem page={page} />
-    //   ))}
-    // </div>
     <div className='flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6'>
-      <div className='flex flex-1 justify-between sm:hidden'>
-        <a
-          href='#'
-          className='relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
-        >
-          Previous
-        </a>
-        <a
-          href='#'
-          className='relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50'
-        >
-          Next
-        </a>
-      </div>
       <div className='hidden sm:flex sm:flex-1 sm:items-center sm:justify-center'>
         <div>
           <nav
             className='isolate inline-flex -space-x-px rounded-md shadow-sm'
             aria-label='Pagination'
           >
-            <a
-              href='#'
-              className='relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
-            >
-              <span className='sr-only'>Previous</span>
-              <FontAwesomeIcon icon={faChevronLeft} />
-            </a>
-            {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-            <a
-              href='#'
-              aria-current='page'
-              className='relative z-10 inline-flex items-center bg-[#F5E6E0] px-4 py-2 text-sm font-semibold text-gray-900 focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-            >
-              1
-            </a>
-
-            {/* <span className='relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0'>
-              ...
-            </span> */}
-            <a
-              href='#'
-              className='relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex'
-            >
-              8
-            </a>
-
-            <a
-              href='#'
-              className='relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
-            >
-              <span className='sr-only'>Next</span>
-              <FontAwesomeIcon icon={faChevronRight} />
-            </a>
+            <div>
+              {pages.map((item) => (
+                <PaginationItem
+                  key={item}
+                  active={page === item}
+                  page={item}
+                />
+              ))}
+            </div>
           </nav>
         </div>
       </div>

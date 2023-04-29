@@ -1,8 +1,26 @@
 import React from 'react'
 import ProductItem from './ProductItem'
-import { IProduct, IProductsPageProps } from '@/types'
+import { IBrand, ICategory, IProduct } from '@/types'
 
-const ProductList = ({ products }: IProductsPageProps) => {
+interface IProductsPageProps {
+  products: IProduct[]
+  brands: IBrand[]
+  categories: ICategory[]
+}
+
+const ProductList = ({ products, brands, categories }: IProductsPageProps) => {
+  const fictitiousBrand = {
+    name: 'No brand',
+    id: 0,
+    isActive: false,
+  }
+
+  const fictitiousCategory = {
+    name: 'No category',
+    id: 0,
+    isActive: false,
+  }
+
   return (
     <section className='py-16'>
       <div className='container mx-auto'>
@@ -11,6 +29,8 @@ const ProductList = ({ products }: IProductsPageProps) => {
             <ProductItem
               key={product.id}
               product={product}
+              brand={brands.find((brand) => brand.id === product.BrandId) || fictitiousBrand}
+              category={categories.find((category) => category.id === product.CategoryId) || fictitiousCategory}
             />
           ))}
         </div>

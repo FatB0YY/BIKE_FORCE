@@ -1,3 +1,4 @@
+import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import Loader from '@/components/Loader'
 import MainLayout from '@/components/MainLayout'
@@ -5,31 +6,65 @@ import Pagination from '@/components/Pagination'
 import ProductList from '@/components/ProductList'
 import Sidebar from '@/components/Sidebar'
 import Tabs from '@/components/Tabs'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux'
+import { setTotalCount } from '@/redux/reducers/UserSlice'
 import UserService from '@/services/UserService'
-import { IProductsPageProps } from '@/types'
+import { IIndexPageProps } from '@/types'
 import { NextPageContext } from 'next'
 import { useEffect, useState } from 'react'
 
-const HomePage = ({ products: serverProducts }: IProductsPageProps) => {
+const HomePage = ({
+  products: serverProducts,
+  tabsBrand: serverTabsBrand,
+  tabsCategory: serverTabsCategory,
+}: IIndexPageProps) => {
   const [products, setProducts] = useState(serverProducts)
+  const [tabsBrand, setTabsBrand] = useState(serverTabsBrand)
+  const [tabsCategory, setTabsCategory] = useState(serverTabsCategory)
+  const { tabBrandId, tabCategoryId, page } = useAppSelector((state) => state.UserReducer)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     async function load() {
-      const response = await UserService.getAllProduct(null, null, 4, 1)
-      setProducts(response.data.rows)
+      const responseProduct = await UserService.getAllProduct(
+        tabBrandId,
+        tabCategoryId,
+        Number(process.env.LIMIT_PRODUCT_ON_LIST)!,
+        page,
+      )
+
+      setProducts(responseProduct.data)
     }
 
-    if (!serverProducts) {
+    load()
+  }, [tabBrandId, tabCategoryId, page])
+
+  useEffect(() => {
+    async function load() {
+      const responseBrand = await UserService.getAllBrand()
+      const responseCategory = await UserService.getAllCategory()
+
+      setTabsBrand(responseBrand.data)
+      setTabsCategory(responseCategory.data)
+    }
+
+    if (!serverTabsBrand || !serverTabsCategory) {
       load()
     }
   }, [])
 
-  if (!products) {
+  useEffect(() => {
+    // сколько всего продуктов мы получили
+    dispatch(setTotalCount(serverProducts.count))
+  }, [serverProducts])
+
+  if (!products || !tabsBrand || !tabsCategory) {
     return (
       <MainLayout title='Home Page'>
         <Hero />
         <Loader />
         <Sidebar />
+        <Footer />
       </MainLayout>
     )
   }
@@ -37,25 +72,43 @@ const HomePage = ({ products: serverProducts }: IProductsPageProps) => {
   return (
     <MainLayout title='Home Page'>
       <Hero />
-      <Tabs />
-      <ProductList products={products} />
+      <Tabs
+        value='brand'
+        tabs={tabsBrand}
+      />
+      <Tabs
+        value='category'
+        tabs={tabsCategory}
+      />
+      <ProductList
+        products={products.rows}
+        brands={tabsBrand}
+        categories={tabsCategory}
+      />
       <Pagination />
       <Sidebar />
     </MainLayout>
   )
 }
 
-HomePage.getInitialProps = async (ctx: NextPageContext) => {
-  if (!ctx.req) {
+export async function getServerSideProps(context: NextPageContext) {
+  if (!context.req) {
     return {
       products: null,
+      tabsBrand: null,
+      tabsCategory: null,
     }
   }
 
-  const response = await UserService.getAllProduct(null, null, 4, 1)
-  const products = response.data.rows
+  const responseProduct = await UserService.getAllProduct(null, null, Number(process.env.LIMIT_PRODUCT_ON_LIST)!, 1)
+  const responseBrand = await UserService.getAllBrand()
+  const responseCategory = await UserService.getAllCategory()
 
-  return { products }
+  const products = responseProduct.data
+  const tabsBrand = responseBrand.data
+  const tabsCategory = responseCategory.data
+
+  return { props: { products, tabsBrand, tabsCategory } }
 }
 
 export default HomePage

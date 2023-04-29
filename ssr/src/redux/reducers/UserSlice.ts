@@ -11,6 +11,8 @@ interface IUserState {
   page: number
   totalCount: number
   limit: number
+  tabCategoryId: number | null
+  tabBrandId: number | null
 }
 
 const initialState: IUserState = {
@@ -21,8 +23,10 @@ const initialState: IUserState = {
   totalPrice: 0,
   // лента товаров
   page: 1,
-  totalCount: 8,
+  totalCount: 0,
   limit: 4,
+  tabBrandId: null,
+  tabCategoryId: null,
 }
 
 // функция для добавления товара в корзину
@@ -126,6 +130,14 @@ export const UserSlice = createSlice({
     setLimit: (state, action: PayloadAction<number>) => {
       state.limit = action.payload
     },
+
+    // tabs
+    setTabCategoryId: (state, action: PayloadAction<number>) => {
+      state.tabCategoryId = action.payload
+    },
+    setTabBrandId: (state, action: PayloadAction<number>) => {
+      state.tabBrandId = action.payload
+    },
   },
 })
 
@@ -142,5 +154,7 @@ export const {
   setPage,
   setTotalCount,
   setLimit,
+  setTabCategoryId,
+  setTabBrandId,
 } = actions
 export default reducer

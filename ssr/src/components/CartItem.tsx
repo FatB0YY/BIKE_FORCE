@@ -11,11 +11,9 @@ interface IPropsProductInCartItem {
   productInCart: IProductInCart
 }
 
-const CartItem = ({ productInCart }: any) => {
+const CartItem = ({ productInCart }: IPropsProductInCartItem) => {
   const dispatch = useAppDispatch()
-  // const { amount, count, id, img, isActive, name, price } = productInCart
-
-  const { amount, count, id, image, isActive, title, price } = productInCart
+  const { amount, count, id, img, isActive, name, price } = productInCart
 
   return (
     <div className='flex gap-x-4 py-2 lg:px-6 border-b border-gray-200 w-full font-light text-gray-500'>
@@ -27,8 +25,8 @@ const CartItem = ({ productInCart }: any) => {
         >
           <Image
             className='max-w-[80px]'
-            alt={title}
-            src={image}
+            alt={name}
+            src={`${process.env.API_URL_WITHOUT_API}${img}`}
             width={80}
             height={150}
           />
@@ -42,7 +40,7 @@ const CartItem = ({ productInCart }: any) => {
               as={`/product/${id}`}
               className='text-sm uppercase font-medium max-w-[240px] text-primary hover:underline'
             >
-              {title}
+              {name}
             </Link>
             {/* remove icon */}
             <div

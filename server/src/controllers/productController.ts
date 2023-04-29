@@ -27,14 +27,16 @@ class ProductController {
         throw ApiError.BadRequest(`Продукт ${name} уже существует`)
       }
 
-      const dir = path.join(__dirname, '..', 'static')
+      const dirPath = path.join(__dirname, '..', 'static')
 
-      fs.mkdir(dir, { recursive: true }, (err) => {
-        if (err) {
-          throw ApiError.internalError('Ошибка при создании папки static', [err])
-        }
-        console.log(`Directory ${dir} created successfully`)
-      })
+      // Проверяем существование папки
+      if (!fs.existsSync(dirPath)) {
+        // Создаем папку
+        fs.mkdirSync(dirPath)
+        console.log(`Directory ${dirPath} created successfully`)
+      } else {
+        console.log(`Directory ${dirPath} already exists`)
+      }
 
       // уникальное имя
       let fileName = uuidv4() + '.jpg'

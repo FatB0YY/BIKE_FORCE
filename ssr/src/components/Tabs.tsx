@@ -1,8 +1,14 @@
 import React from 'react'
 import TabsItem from './TabsItem'
+import { ITab } from '@/types'
 
-const Tabs = ({ items }: any) => {
-  if (!items) {
+interface IPropTabs {
+  tabs: ITab[]
+  value: string
+}
+
+const Tabs = ({ tabs, value }: IPropTabs) => {
+  if (!tabs) {
     return <div className='display-none'></div>
   }
 
@@ -10,8 +16,12 @@ const Tabs = ({ items }: any) => {
     <div className='container mx-auto mt-10'>
       <div className='text-sm font-medium text-center text-gray-500 border-b'>
         <ul className='flex flex-wrap -mb-px'>
-          {items.map((item: any) => (
-            <TabsItem item={item} />
+          {tabs.map((tab: ITab) => (
+            <TabsItem
+              key={tab.id}
+              tab={tab}
+              value={value}
+            />
           ))}
         </ul>
       </div>
