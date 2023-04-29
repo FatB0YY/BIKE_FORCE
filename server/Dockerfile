@@ -7,6 +7,7 @@ COPY tsconfig.json ./
 COPY nodemon.json ./
 COPY error-dev.log ./
 COPY error-prod.log ./
+COPY error-prod.log ./
 
 RUN npm install 
 

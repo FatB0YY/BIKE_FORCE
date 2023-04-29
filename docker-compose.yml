@@ -24,6 +24,8 @@ services:
       - pgadmin
     networks:
       - BIKE_FORCE-network
+    volumes:
+      - server-data:/usr/src/app/static
 
   server_db:
     image: postgres:15
@@ -68,6 +70,7 @@ services:
 volumes:
   postgres-data:
   pgadmin_data:
+  server-data:
 
 networks:
   BIKE_FORCE-network:

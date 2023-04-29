@@ -10,9 +10,10 @@ import path from 'path'
 import cors from 'cors'
 import logger from './logger/index.js'
 import fileDirName from './utils/fileDirName.js'
-import formData from 'express-form-data'
 import sequelize from './db.js'
 import bcrypt from 'bcrypt'
+import { IUserAttributes } from './models/IUser.js'
+import fileUpload from 'express-fileupload'
 
 const { __dirname, __filename } = fileDirName(import.meta)
 const app: Express = express()
@@ -23,8 +24,8 @@ app.use(
     origin: process.env.CLIENT_URL || '*',
   }),
 )
+app.use(fileUpload({}))
 app.use(json())
-app.use(formData.parse())
 app.use(cookieParser())
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use('/api', router)
@@ -49,18 +50,23 @@ const start = async () => {
     const users = await model.User.findAll()
     if (users.length === 0) {
       // Если пользователей нет, то добавляем нового пользователя с ролью ADMIN
-      const password = process.env.ADMIN_PASSWORD // Получаем пароль из .env файла
+      const password = process.env.ADMIN_PASSWORD! // Получаем пароль из .env файла
       const email = process.env.ADMIN_EMAIL // Получаем почту из .env файла
 
       // bcrypt
       const salt = await bcrypt.genSalt()
-      const hashPassword = await bcrypt.hash(password.toString(), salt)
 
-      await model.User.create({
-        id: 1,
-        email,
-        password: hashPassword,
-      })
+      if (password) {
+        const hashPassword = await bcrypt.hash(password.toString(), salt)
+
+        if (hashPassword) {
+          ;(await model.User.create({
+            id: 1,
+            email,
+            password: hashPassword!,
+          })) as unknown as IUserAttributes
+        }
+      }
 
       // Связываем пользователя с ролью ADMIN
       await model.UserRole.create({
