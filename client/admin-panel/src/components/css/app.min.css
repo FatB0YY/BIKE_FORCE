@@ -1,0 +1,11 @@
+.app {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.main {
+  position: relative;
+  width: 100%;
+}
+/*# sourceMappingURL=app.min.css.map */

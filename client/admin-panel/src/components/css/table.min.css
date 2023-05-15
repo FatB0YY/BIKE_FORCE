@@ -1,0 +1,129 @@
+@charset "UTF-8";
+table {
+  margin: 0 0 0 35px;
+  border-spacing: 0;
+  width: 1200px;
+}
+
+table tr :last-child td {
+  border-bottom: 0;
+}
+
+table th,
+table td {
+  margin: 0;
+  padding: 0.5rem;
+  border: 1px solid #aeaeae;
+}
+
+table th :last-child,
+table td :last-child {
+  border-right: 0;
+}
+
+table th input,
+table td input {
+  border: 0;
+}
+
+table th select,
+table td select {
+  border: 0;
+}
+
+thead {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btns {
+  margin: 20px 0 10px 36px;
+  width: 250px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.btns__delete, .btns__add {
+  background-color: white;
+  font-size: 18px;
+  width: 120px;
+  height: 35px;
+  font-weight: 500;
+  border: 0px solid;
+  cursor: pointer;
+  color: black;
+  border: 2px solid #ffd754ec;
+  -webkit-box-shadow: 0px 0px 0.5px 1px #f6f3f3;
+          box-shadow: 0px 0px 0.5px 1px #f6f3f3;
+}
+
+.btns__delete:hover, .btns__add:hover {
+  background-color: #ffd754ec;
+  -webkit-transition: all 0.35s ease 0s;
+  transition: all 0.35s ease 0s;
+}
+
+.pagination {
+  margin: 10px 0 0 36px;
+}
+
+.table__column {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 80px;
+}
+
+.table__column-img {
+  width: 100%;
+}
+
+table .toggle-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+th:nth-child(5) > div:nth-child(2) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+tbody > tr > td > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+tbody > tr > td {
+  text-align: center;
+}
+
+tbody {
+  max-height: 100px;
+  /* максимальная высота контейнера */
+  overflow-y: scroll;
+}
+/*# sourceMappingURL=table.min.css.map */
