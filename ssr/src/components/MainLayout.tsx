@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC, PropsWithChildren } from 'react'
 import Head from 'next/head'
 import Header from './Header'
 import Footer from './Footer'
@@ -8,11 +8,17 @@ interface IPropsMainLayout {
   title: string
 }
 
-const MainLayout = ({ children, title }: IPropsMainLayout) => {
+const MainLayout: FC<PropsWithChildren<IPropsMainLayout>> = ({ children, title }) => {
+  const titleHead = `${title} | BIKE FORCE`
+
   return (
     <>
       <Head>
-        <title>{title} | BIKE FORCE</title>
+        <title>{titleHead}</title>
+        <meta
+          name='viewport'
+          content='width=device-width, initial-scale=1'
+        />
       </Head>
       <Header />
       <main>{children}</main>

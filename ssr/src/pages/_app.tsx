@@ -38,7 +38,10 @@ const myFont = localFont({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className={`${myFont.className} font-sans`}>
+    <div
+      className={myFont.className}
+      style={myFont.style}
+    >
       <Provider store={store}>
         <Component {...pageProps} />
       </Provider>
