@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProductMainView: View {
+    
+    var product:Product
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
@@ -16,5 +18,6 @@ struct ProductMainView: View {
 struct ProductMainView_Previews: PreviewProvider {
     static var previews: some View {
         ProductMainView()
+//            .environmentObject(CartViewModel())
     }
 }

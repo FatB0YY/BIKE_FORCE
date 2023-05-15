@@ -2,59 +2,38 @@
 import SwiftUI
 
 struct enterView: View {
-    
+    @ObservedObject var model:enterView_class = enterView_class()
     
     @State private var path = NavigationPath()
+    @State private var logIn:Bool = false
+    @State private var progress:Int = 0
+    
+    @State private var email:String = ""
+    @State private var password:String = ""
+    @State private var chekPassword:String = ""
+    
+    
     var body: some View {
         NavigationStack(path: $path){
-            VStack{
-                Group{
-                    Text("Здравствуйте!")
-                        .font(.system(size: 24))
-                        .fontWeight(.medium)
-                    Group{
-                        Text("BikeForce - возможность")
-                            .padding(.top, 1)
-                        Text(" получить велик мечты!")
-                    }
-                    .font(.system(size: 20))
-                        .multilineTextAlignment(.center)
-                }
+            GeometryReader{ geometry in
+                EnterView_1(addProgress: addProgress)
+                    .offset(x: progress == 0 ? geometry.size.height/30 : geometry.size.width, y: geometry.size.width/2)
+                EnterView_2(addProgress: addProgress, email: $email)
+                    .offset(x: progress == 1 ? geometry.size.height/30 : geometry.size.width, y: geometry.size.width/2)
                 
-                Group{
-                    Button{
-                        path.append("Вход")
-                    }label: {
-                        Text("Вход")
-                            .frame(width: 343, height: 46)
-                            .background(Color.black)
-                            .cornerRadius(13)
-                            .foregroundColor(.white)
-//                            .border(Color.purple, width: 5)
-                            
-                     
-
-                        
-                            
-                    }.padding(.top, 33)
-                    Button{
-                        path.append("Регистрация")
-                    }label: {
-                        Text("Регистрация")
-                            .frame(width: 343, height: 46)
-                            .background(Color.black)
-                            .cornerRadius(13)
-                            .foregroundColor(.white)
-                    }
-                }
-                
+                EnterView_3(addProgress: addProgress, email: $email, password: $password, checkPassword: $chekPassword, model:model)
+                    .offset(x: progress == 5 ? geometry.size.height/30 : geometry.size.width, y: geometry.size.width/2)
             }
+            
+            
             .navigationDestination(for: String.self){view in
                 if view == "Вход" {
-                    enterView_01()
+                    MainView()
                 }
                 else if view == "Регистрация" {
-                    enterView_02()
+                    
+                }else if view == "Корзина"{
+                    CartView()
                 }
                 
             }
@@ -62,7 +41,30 @@ struct enterView: View {
         
         
     }
+    func addProgress(i :Int){
+        
+//        guard progress < 2 else{
+//            progress = 0
+//            return
+//        }
+//        progress += 1
+
+        
+        
+        if i == 0 {
+            progress = 1
+        }else if i == 1{
+            path.append("Вход")
+        }else if i == 5{
+            progress = 5
+        }else if i == 6{
+            
+        }
+    }
+    
+    
 }
+
 
 struct enterView_Previews: PreviewProvider {
     static var previews: some View {

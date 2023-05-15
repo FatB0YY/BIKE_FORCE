@@ -8,13 +8,29 @@
 import SwiftUI
 
 struct ProductList: View {
+    
+    @EnvironmentObject var cartManager:CartViewModel
+    var columns = [GridItem(.adaptive(minimum: 160),spacing: 30)]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+
+        ScrollView{
+            Spacer()
+                .frame(height: 40)
+            LazyVGrid(columns: columns, spacing: 80){
+                ForEach(productList, id: \.id){
+                    product in
+                    ProductView(product: product)
+                        .environmentObject(cartManager)
+                        
+                }
+            }.padding()
+        }
     }
 }
 
 struct ProductList_Previews: PreviewProvider {
     static var previews: some View {
         ProductList()
+            .environmentObject(CartViewModel())
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EnterView_2: View {
-    var addProgress:() ->Void
+    var addProgress:(_ i:Int) ->Void
     
     @Binding var email:String
     var body: some View {
@@ -30,7 +30,7 @@ struct EnterView_2: View {
                 
                 Button(action: {
                     withAnimation {
-                        addProgress()
+                        addProgress(1)
                     }
                 }) {
                     Text("Далее")

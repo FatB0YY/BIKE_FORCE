@@ -9,13 +9,8 @@ import Foundation
 
 
 struct userInfo{
-    var lastName:String?
-    var firstName:String?
-    var patronimyc:String?
-    var gender: Bool?
-    var city: String?
     var email:String?
     var password:String?
-    var phoneNumber:String?
-    var link:String = "https://someLink"
+    var roles:String = "USER"
+    var link:String = ""
 }
