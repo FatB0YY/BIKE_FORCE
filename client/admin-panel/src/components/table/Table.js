@@ -156,13 +156,16 @@ const Table = ({ columns, data, styles, pages }) => {
   return (
     <div className='table'>
       <div className='btns'>
-        <button
-          type='button'
-          className='btns__delete'
-          onClick={(e) => handleDeleteSelectedRows(e)}
-        >
-          Удалить
-        </button>
+        {pages === 'users' ? null : (
+          <button
+            type='button'
+            className='btns__delete'
+            onClick={(e) => handleDeleteSelectedRows(e)}
+          >
+            Удалить
+          </button>
+        )}
+
         {pages === 'users' ? (
           <button
             type='button'

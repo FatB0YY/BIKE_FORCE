@@ -5,6 +5,7 @@ import Table from '../table/Table'
 import NumberRangeColumnFilter from '../filters/numberRangeColumnFilter/NumberRangeColumnFilter'
 import SelectColumnFilter from '../filters/selectColumnFilter/SelectColumnFilter'
 import ProductService from '../../services/ProductService'
+import imageSrc from '../../assets/images/velo-1.jpg'
 
 const ListProducts = ({ setModalS }) => {
   const { product, category, brand } = useSelector((state) => state)
@@ -34,7 +35,7 @@ const ListProducts = ({ setModalS }) => {
       Cell: ({ value }) => (
         <div className='table__column'>
           <img
-            src={`http://localhost:4000/${value}`}
+            src={imageSrc}
             alt='Product'
             className='table__column-img'
           />
