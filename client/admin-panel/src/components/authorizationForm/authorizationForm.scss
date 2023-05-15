@@ -47,15 +47,18 @@
                 &:focus {
                     outline: none;
                     border-color: #ffd754ec;
-                  }
+                }
             }
         }
         &-forgetParol {
             text-align: right;
             a {
-                color: black;
+                color: #000000;
+                border-bottom: 1px solid #000;
+                &:hover {
+                    border-bottom: 1px solid #ffd754ec;
+                }
             }
-            
         }
         &-btn {
             &-sigin {
@@ -78,8 +81,18 @@
                 a {
                     color: black;
                 }
+                > div:nth-child(2) {
+                    border-bottom: 1px solid black;
+                    &:hover {
+                        border-bottom: 1px solid #ffd754ec;
+                    }
+                }
             }
         }
     }
 }
 
+.input-error {
+    color: red;
+    padding-left: 10px;
+}

@@ -1,47 +1,34 @@
 const initialState = {
-  products: [],
-  brands: [],
-  categories: [],
-  ptoductsLoadingStatus: 'idle',
+  product: [],
+  brand: [],
+  category: [],
   modalStatus: false,
-  boolPage: {boolCategory: false, boolBrand: false},
+  boolPage: { boolCategory: false, boolBrand: false, boolUsers: false },
   user: {},
-  roles:[],
-  isAuth: false,
+  users: [],
+  roles: [],
   isLoading: false,
-  toggleForm: false
+  toggleForm: false,
+  validMessage: null,
+  userRoleForValid: null,
+  userRoleId: null,
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'PDODUCT_FETCHING':
+    case 'VALUE_DELETED':
+      const { page, ids } = action
+      const newList = state[page].map((item) => {
+        return ids.includes(item.id) ? { ...item, isActive: false } : item
+      })
       return {
         ...state,
-        ptoductsLoadingStatus: 'loading',
-      }
-    case 'PDODUCT_FETCHED':
-      return {
-        ...state,
-        products: action.payload,
-        ptoductsLoadingStatus: 'idle',
-      }
-    case 'PDODUCT_FETCHING_ERROR':
-      return {
-        ...state,
-        ptoductsLoadingStatus: 'error',
-      }
-    case 'PRODUCT_DELETED':
-      const newHeroList = state.products.filter(
-        (item) => !action.payload.includes(item.id)
-      )
-      return {
-        ...state,
-        products: newHeroList,
+        [page]: newList,
       }
     case 'PRODUCT_ADD':
       return {
         ...state,
-        products: [...state.products, action.payload],
+        product: [...state.product, action.payload],
       }
     case 'MODAL_TOGGLE':
       return {
@@ -49,61 +36,76 @@ const reducer = (state = initialState, action) => {
         modalStatus: !state.modalStatus,
       }
     case 'BRAND_ADD':
-        return {
-          ...state,
-          brands: [...state.brands, action.payload,]
-        }
-    case 'BRAND_DELETED':
-      const newBrandList = state.brands.filter(
-        (item) => !action.payload.includes(item.id)
-      )
       return {
         ...state,
-        brands: newBrandList,
+        brand: [...state.brand, action.payload],
       }
-      case 'CATEGORIES_ADD':
-        return {
-          ...state,
-          categories: [...state.categories, action.payload]
-        }
-    case 'CATEGORIES_DELEED':
-      const newCategoriesList = state.brands.filter(
+    case 'BRAND_DELETED':
+      const newBrandList = state.brand.filter(
         (item) => !action.payload.includes(item.id)
       )
       return {
         ...state,
-        categories: newCategoriesList,
+        brand: newBrandList,
+      }
+    case 'CATEGORIES_ADD':
+      return {
+        ...state,
+        category: [...state.category, action.payload],
+      }
+    case 'CATEGORIES_DELEED':
+      const newCategoriesList = state.brand.filter(
+        (item) => !action.payload.includes(item.id)
+      )
+      return {
+        ...state,
+        category: newCategoriesList,
       }
     case 'TOGGLE_BOOL_PAGE':
       const newObj = action.payload
       return {
         ...state,
-        boolPage: newObj
-      }
-    case 'SET_AUTH': 
-      return {
-        ...state,
-        isAuth: action.payload
+        boolPage: newObj,
       }
     case 'SET_USER':
       return {
         ...state,
-        user: action.payload
+        user: action.payload,
       }
     case 'SET_LOADING':
       return {
         ...state,
-        isLoading: action.payload
+        isLoading: action.payload,
       }
     case 'TOGGLE_FORM':
       return {
         ...state,
-        toggleForm: action.payload
+        toggleForm: action.payload,
       }
     case 'SET_ROLES':
       return {
         ...state,
-        roles: action.payload
+        roles: action.payload,
+      }
+    case 'GET_ALL_USERS':
+      return {
+        ...state,
+        users: [...state.users, action.users],
+      }
+    case 'SET_VALID_MESSAGE':
+      return {
+        ...state,
+        validMessage: action.validMessage,
+      }
+    case 'SET_USER_ROLE_FOR_VALID':
+      return {
+        ...state,
+        userRoleForValid: action.userRoleForValid,
+      }
+    case 'SET_USER_ROLE_ID':
+      return {
+        ...state,
+        userRoleId: action.userRoleId,
       }
     default:
       return state

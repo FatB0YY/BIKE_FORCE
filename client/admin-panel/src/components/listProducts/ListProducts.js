@@ -1,14 +1,16 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Table from '../table/Table'
 import NumberRangeColumnFilter from '../filters/numberRangeColumnFilter/NumberRangeColumnFilter'
 import SelectColumnFilter from '../filters/selectColumnFilter/SelectColumnFilter'
-import { productsFetched, productsFetchingError } from '../../actions'
+import ProductService from '../../services/ProductService'
 
 const ListProducts = ({ setModalS }) => {
-  const { products } = useSelector((state) => state)
+  const { product, category, brand } = useSelector((state) => state)
   const dispatch = useDispatch()
+
+  const [data, setData] = useState([])
 
   function filterGreaterThan(rows, id, filterValue) {
     return rows.filter((row) => {
@@ -19,12 +21,6 @@ const ListProducts = ({ setModalS }) => {
 
   filterGreaterThan.autoRemove = (val) => typeof val !== 'number'
 
-  useEffect(() => {
- /*    request('http://localhost:3001/products')
-      .then((data) => dispatch(productsFetched(data)))
-      .catch(() => dispatch(productsFetchingError())) */
-  }, [])
-
   const columns = useMemo(() => [
     {
       Header: 'Название товара',
@@ -33,12 +29,12 @@ const ListProducts = ({ setModalS }) => {
     },
     {
       Header: 'Изображение',
-      accessor: 'image',
+      accessor: 'img',
       Filter: () => null,
       Cell: ({ value }) => (
         <div className='table__column'>
           <img
-            src={value}
+            src={`http://localhost:4000/${value}`}
             alt='Product'
             className='table__column-img'
           />
@@ -52,6 +48,12 @@ const ListProducts = ({ setModalS }) => {
       filter: 'includes',
     },
     {
+      Header: 'бренд',
+      accessor: 'brand',
+      Filter: SelectColumnFilter,
+      filter: 'includes',
+    },
+    {
       Header: 'Цена',
       accessor: 'price',
       Filter: NumberRangeColumnFilter,
@@ -59,25 +61,80 @@ const ListProducts = ({ setModalS }) => {
     },
     {
       Header: 'Описание',
-      accessor: 'description',
+      accessor: 'info',
       Filter: () => null,
+    },
+    {
+      Header: 'Количество',
+      accessor: 'count',
+      Filter: NumberRangeColumnFilter,
+      filter: 'between',
     },
   ])
 
-  /*   const data = useMemo(() => products || [], [products]) */
+  useEffect(() => {
+    if (product && product.length > 0) {
+      const fetchInfo = async (id) => {
+        const productInfo = await ProductService.getProductId(id)
+        return productInfo
+      }
+      const fetchData = async () => {
+        const promises = product.map(async (product) => {
+          const responseInfo = await fetchInfo(product.id)
+          const dataRes = {}
+          for (const key in responseInfo) {
+            brand.forEach((item) => {
+              const value = responseInfo[key]
+              if (key === 'BrandId') {
+                if (item.id === value) {
+                  dataRes['brand'] = item.name
+                }
+              }
+            })
+            category.forEach((item) => {
+              const value = responseInfo[key]
+              if (key === 'CategoryId') {
+                if (item.id === value) {
+                  dataRes['category'] = item.name
+                }
+              }
+            })
+            if (key === 'info') {
+              responseInfo[key].forEach((item) => {
+                const title = item.title
+                const description = item.description
+
+                dataRes['info'] = [`${title}: ${description}`]
+              })
+            }
+          }
+
+          return {
+            name: product.name,
+            id: product.id,
+            price: product.price,
+            img: product.img,
+            count: product.count,
+            isActive: product.isActive,
+            info: dataRes.info,
+            category: dataRes.category,
+            brand: dataRes.brand,
+          }
+        })
+        const filteredProduct = await Promise.all(promises)
+        setData(filteredProduct)
+      }
+
+      fetchData()
+    }
+  }, [product])
 
   return (
     <Table
       columns={columns}
-      data={[ {
-        "name": "авыавыа",
-        "image": "/assets/products/velo-1.jpg",
-        "description": "авыаываы",
-        "category": "аыаыаы",
-        "price": "43",
-        "id": "72dc699a-9b91-48ce-9fcd-e3e35b093b70"
-      },]}
+      data={data}
       setModalS={setModalS}
+      pages={'product'}
     />
   )
 }

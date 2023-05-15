@@ -1,7 +1,8 @@
-import $api from "../hooks/useHttp"
+import $api from '../hooks/useHttp'
 
 export default class UserService {
-    static fetchUser() {
-        return $api.get('/users')
-    }
+  static async getUsers() {
+    const response = await $api.get('/user/users')
+    return response.data
+  }
 }

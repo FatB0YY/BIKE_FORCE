@@ -27,7 +27,7 @@ table {
   }
 }
 thead {
-  background-color:rgba(0, 0, 0, 0.1)
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .btns {
@@ -46,7 +46,7 @@ thead {
     cursor: pointer;
     color: black;
     border: 2px solid #ffd754ec;
-    box-shadow:0px 0px 0.5px 1px #f6f3f3;
+    box-shadow: 0px 0px 0.5px 1px #f6f3f3;
     &:hover {
       background-color: #ffd754ec;
       transition: all 0.35s ease 0s;
@@ -76,7 +76,11 @@ table .toggle-row {
   justify-content: center;
 }
 
-th:nth-child(5) > div:nth-child(2) {
+th:nth-child(6) > div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+}
+th:nth-child(8) > div:nth-child(2) {
   display: flex;
   justify-content: center;
 }
@@ -90,3 +94,7 @@ tbody > tr > td {
   text-align: center;
 }
 
+tbody {
+  max-height: 100px; /* максимальная высота контейнера */
+  overflow-y: scroll;
+}

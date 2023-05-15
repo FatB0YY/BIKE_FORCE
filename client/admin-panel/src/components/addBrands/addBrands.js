@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-
 import Table from '../table/Table'
 
 const AddBrands = () => {
-  const {brands} = useSelector(state => state);
+  const { brand } = useSelector((state) => state)
+
+  const [data, setData] = useState([])
 
   function filterGreaterThan(rows, id, filterValue) {
     return rows.filter((row) => {
@@ -22,21 +23,33 @@ const AddBrands = () => {
       filter: 'fuzzyText',
     },
   ])
- 
+
   const tableStyles = {
     table: {
       minWidth: '300px',
-      margin: '0 0 0 35px'
+      margin: '0 0 0 35px',
     },
   }
 
-    return (
-      <Table 
+  useEffect(() => {
+    if (brand && brand.length > 0) {
+      const filteredBrands = brand.map((brand) => ({
+        name: brand.name,
+        id: brand.id,
+        isActive: brand.isActive,
+      }))
+      setData(filteredBrands)
+    }
+  }, [brand])
+
+  return (
+    <Table
       columns={columns}
-      data={brands}
+      data={data}
       styles={tableStyles}
-      />
-    )
+      pages={'brand'}
+    />
+  )
 }
 
-export default AddBrands;
+export default AddBrands

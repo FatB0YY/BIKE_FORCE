@@ -1,68 +1,106 @@
-import { useEffect, useState } from "react";
-import AuthService from "../../services/AuthService";
-import RolesService from "../../services/RolesService";
-import { setAuth, setUser, setRoles } from '../../actions'
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useEffect, useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
+import AuthService from '../../services/AuthService'
+import { setAutMenu, setUser } from '../../actions'
+import { useValidation } from '../../hooks/useValidation'
+import { errorTextInput } from '../../hooks/useValidation'
+import RolesService from '../../services/RolesService'
 
 const RegistrationForm = () => {
+  const { roles } = useSelector((state) => state)
 
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-const dispatch = useDispatch();
-const navigate = useNavigate();
+  const { valid } = useValidation()
 
-const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-};
-    
-const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-};
-    
-const handleSubmit = (event) => {
-    event.preventDefault();
-};
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [errorText, setErrorText] = useState({})
+  const [errorBool, setErrorBool] = useState(false)
 
-    const registration = async (email, password) => {
-        try {
-          const response = await AuthService.registration(email, password);
-          console.log(response);
-          localStorage.setItem('token', response.data.accessToken);
-          dispatch(setAuth(true));
-          dispatch(setUser(response.data.user));
-        } catch (e) {
-            console.log('Ошибка при авторизации:', e.response.data.message)
-        }
+  const refEmail = useRef()
+  const refPassword = useRef()
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value)
+  }
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value)
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+  }
+
+  const registration = async (email, password) => {
+    try {
+      const roleUser = await RolesService.getOneRol('USER')
+      const response = await AuthService.registration(
+        email.toLowerCase(),
+        password,
+        [roleUser]
+      )
+      localStorage.setItem('token', response.data.accessToken)
+      navigate('/')
+    } catch (e) {
+      console.log('Ошибка при авторизации:', e.response.data)
+      setErrorText(valid(refEmail, refPassword, e.response.data))
+      setErrorBool(true)
     }
-return (
-    <div className="authorization-overlay">
-        <form action="" onSubmit={handleSubmit} className="form">
-        <div className="form__wraper">
-            <h2>Регистрация</h2>
-            <div className="form__wraper-input">
-                <input type="email" value={email} onChange={(e) => handleEmailChange(e)} placeholder='Почта'/>
+  }
+  return (
+    <div className='authorization-overlay'>
+      <form
+        action=''
+        onSubmit={handleSubmit}
+        className='form'
+      >
+        <div className='form__wraper'>
+          <h2>Регистрация</h2>
+          <div className='form__wraper-input'>
+            <input
+              type='email'
+              ref={refEmail}
+              value={email}
+              onChange={(e) => handleEmailChange(e)}
+              placeholder='Почта'
+            />
+            {errorBool ? errorTextInput('email', errorText) : null}
+          </div>
+          <div className='form__wraper-input'>
+            <input
+              type='password'
+              ref={refPassword}
+              value={password}
+              onChange={(e) => handlePasswordChange(e)}
+              placeholder='Пароль'
+            />
+            {errorBool ? errorTextInput('password', errorText) : null}
+          </div>
+          <div className='form__wraper-btn-sigin'>
+            <button
+              type='submit'
+              onClick={() => registration(email, password)}
+            >
+              Зарегистрироваться
+            </button>
+          </div>
+          <div className='form__wraper-btn-registraton'>
+            <div>
+              <span>Eсть аккаунт?</span>
             </div>
-            <div className="form__wraper-input">
-                <input type="password" value={password} onChange={(e) => handlePasswordChange(e)} placeholder='Пароль'/>
+            <div>
+              <a href='/'>войдите</a>
             </div>
-            <div className="form__wraper-btn-sigin">
-                <button type="submit" onClick={() => registration(email, password)}>зарегистрироваться</button>
-            </div>
-            <div className="form__wraper-btn-registraton">
-                <div>
-                    <span>eсть аккаунт?</span>
-                </div>
-                <div>
-                    <a href="/">войдите</a>
-                </div>
+          </div>
         </div>
-      </div>
-            </form>
-        </div>
-    )
+      </form>
+    </div>
+  )
 }
 
-export default RegistrationForm;
+export default RegistrationForm

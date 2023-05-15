@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import CategoryService from '../../services/CategoryService'
+import { categoriesAdd } from '../../actions'
 
 import Table from '../table/Table'
 
 const AddCategories = () => {
 
-  const {category, setCategory} = useState(null)
+  const [data, setData] = useState([]);
 
-  const {categories} = useSelector(state => state);
+  const {category} = useSelector(state => state);
 
   function filterGreaterThan(rows, id, filterValue) {
     return rows.filter((row) => {
@@ -17,7 +19,6 @@ const AddCategories = () => {
   }
 
   filterGreaterThan.autoRemove = (val) => typeof val !== 'number'
-
 
   const columns = useMemo(() => [
     {
@@ -34,12 +35,24 @@ const AddCategories = () => {
     },
   }
 
+  useEffect(() => {
+    if(category && category.length > 0) {
+      const filteredCategories = category.map((category) => ({
+        name: category.name,
+        id: category.id,
+        isActive: category.isActive
+      }));
+      setData(filteredCategories);
+    }
+  },[category])
+
+ 
     return (
       <Table 
       columns={columns}
-      data={categories}
+      data={data}
       styles={tableStyles}
-      pages={{boolCategory: true, boolBrand: false}}/>
+      pages={'category'}/>
     )
 }
 

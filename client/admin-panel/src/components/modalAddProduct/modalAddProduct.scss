@@ -10,20 +10,26 @@
   background-color: rgba(0, 0, 0, 0.72);
   top: 0;
   left: 0;
+  &__message {
+    text-align: center;
+    font-size: 24px;
+    color: red;
+  }
   h2 {
     font-size: 32px;
-    color:#ffd754ec;
+    color: #ffd754ec;
   }
   &__header {
     position: relative;
-    display: flex; 
+    display: flex;
     align-items: center;
+    height: 40px;
   }
   &__exit {
     position: absolute;
     left: 340px;
-    bottom: 70px;
-    width: 35px;  
+    bottom: 20px;
+    width: 35px;
     cursor: pointer;
     z-index: 10000000000000000000;
     &-icon {
@@ -42,10 +48,10 @@
   }
   &__body {
     margin-top: 50px;
-    min-height: 400px;
+    min-height: 450px;
     width: 500px;
     form {
-      min-height: 380px;
+      min-height: 420px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -70,6 +76,10 @@
           border: 2px solid #c0baba38;
           font-size: 15px;
           padding-left: 10px;
+          &:focus {
+            outline: none;
+            border-color: #ffd754ec;
+          }
         }
       }
       label {
@@ -101,6 +111,10 @@
         border: 2px solid #c0baba38;
         font-size: 15px;
         padding-left: 10px;
+        &:focus {
+          outline: none;
+          border-color: #ffd754ec;
+        }
       }
       &-property {
         width: 400px;
@@ -114,33 +128,33 @@
     }
     &-group-props {
       display: flex;
-      max-height: 80px; 
+      max-height: 80px;
       overflow-y: auto;
       flex-direction: column;
-      justify-content:initial; 
+      justify-content: initial;
       padding-left: 45px;
-        button {
-          width: 70px;
-          height: 30px;
-          font-size: 10px;
-        }
-        input {
-          width: 100px;
-          height: 40px;
-          border-radius: 5px;
-          margin-bottom: 5px;
-          font-size: 20px;
-          border: 0;
-          font-size: 15px;
-          padding-left: 10px;
-        }
+      button {
+        cursor: pointer;
+        border: 0px;
+        background-color: #ffd754ec;
+        color: white;
+        width: 70px;
+        height: 30px;
+        font-size: 10px;
       }
-    
-    &-group:nth-child(3) {
-      height: 30px;
       input {
-        padding: 0;
-        border: 0;
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        font-size: 20px;
+        border: 2px solid #c0baba38;
+        font-size: 15px;
+        padding-left: 10px;
+        &:focus {
+          outline: none;
+          border-color: #ffd754ec;
+        }
       }
     }
     &-group:nth-child(4) {
