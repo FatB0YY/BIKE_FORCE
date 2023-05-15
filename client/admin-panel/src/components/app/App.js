@@ -4,20 +4,18 @@ import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { API_URL } from '../../hooks/useHttp'
-import { setUser, setLoading, setRoles } from '../../actions'
-import RolesService from '../../services/RolesService'
+import { setUser, setLoading } from '../../actions'
 import UserService from '../../services/UserService'
 
 import { getAllUsers } from '../../actions'
 
-import MainPage from '../../pages/mainPage'
+import ProductPage from '../../pages/productPage'
 import BrandPage from '../../pages/brandPage'
 import CategoryPage from '../../pages/categoryPage'
-import CategoryService from '../../services/CategoryService'
 import RegistrationForm from '../registrationForm/registrationForm'
 import AuthorizationForm from '../authorizationForm/authorizationForm'
 import ModalAddProduct from '../modalAddProduct/ModalAddProduct'
-import AddUsers from '../addUsers/addUsers'
+import AddUsers from '../listUsers/ListUsers'
 import Menu from '../menu/Menu'
 
 import './app.scss'
@@ -26,7 +24,6 @@ const App = () => {
   const dispatch = useDispatch()
   const location = useLocation()
 
-  const { user } = useSelector((state) => state)
   const [modalS, setModalS] = useState(false)
 
   const chetAut = async () => {
@@ -75,7 +72,7 @@ const App = () => {
           />
           <Route
             path='/product'
-            element={<MainPage />}
+            element={<ProductPage />}
           />
           <Route
             path='/brand'

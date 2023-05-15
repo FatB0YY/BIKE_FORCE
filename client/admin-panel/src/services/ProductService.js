@@ -2,7 +2,8 @@ import $api from '../hooks/useHttp'
 
 export default class ProductService {
   static async postProduct(formData) {
-    return $api.post('/product', formData)
+    const response = await $api.post('/product', formData)
+    return response
   }
   static async getProducts() {
     const response = await $api.get('/product')

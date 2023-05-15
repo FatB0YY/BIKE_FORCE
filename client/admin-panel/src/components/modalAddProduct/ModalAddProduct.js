@@ -128,7 +128,6 @@ const ModalAddProduct = () => {
       dispatch(brandsAdd(response.data))
     } else if (boolUsers) {
       const roleUser = await RolesService.getOneRol(userRoleForValid)
-      console.log(userRoleId)
       const response = await RolesService.addUserRoles(userRoleId, [roleUser])
     }
     setName('')
@@ -305,6 +304,34 @@ const ModalAddProduct = () => {
                     </option>
                     {viewCategory(roles)}
                   </select>
+                </div>
+                <div className='modal__body-group-btn_prop roles__btn'>
+                  <button onClick={(e) => handleAddProperty(e)}>
+                    Добавить роль в бд
+                  </button>
+                </div>
+                <div className='modal__body-group-props'>
+                  {properties.map((property) => (
+                    <div
+                      className='modal__body-group-property roles__property'
+                      key={property.id}
+                      id={property.id}
+                    >
+                      <input
+                        type='text'
+                        placeholder='Введите значение'
+                        onBlur={(e) => setPropName(e.target.value)}
+                      />
+                      <input
+                        type='text'
+                        placeholder='Введите описание'
+                        onBlur={(e) => setPropDesr(e.target.value)}
+                      />
+                      <button onClick={() => handleRemoveProperty(property.id)}>
+                        Удалить
+                      </button>
+                    </div>
+                  ))}
                 </div>
                 <div className='modal__message'>
                   {validMessage ? validMessage : null}

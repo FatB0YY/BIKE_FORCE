@@ -5,11 +5,10 @@ import { categoriesAdd } from '../../actions'
 
 import Table from '../table/Table'
 
-const AddCategories = () => {
+const ListCategories = () => {
+  const [data, setData] = useState([])
 
-  const [data, setData] = useState([]);
-
-  const {category} = useSelector(state => state);
+  const { category } = useSelector((state) => state)
 
   function filterGreaterThan(rows, id, filterValue) {
     return rows.filter((row) => {
@@ -27,33 +26,33 @@ const AddCategories = () => {
       filter: 'fuzzyText',
     },
   ])
- 
+
   const tableStyles = {
     table: {
       minWidth: '300px',
-      margin: '0 0 0 35px'
+      margin: '0 0 0 35px',
     },
   }
 
   useEffect(() => {
-    if(category && category.length > 0) {
+    if (category && category.length > 0) {
       const filteredCategories = category.map((category) => ({
         name: category.name,
         id: category.id,
-        isActive: category.isActive
-      }));
-      setData(filteredCategories);
+        isActive: category.isActive,
+      }))
+      setData(filteredCategories)
     }
-  },[category])
+  }, [category])
 
- 
-    return (
-      <Table 
+  return (
+    <Table
       columns={columns}
       data={data}
       styles={tableStyles}
-      pages={'category'}/>
-    )
+      pages={'category'}
+    />
+  )
 }
 
-export default AddCategories;
+export default ListCategories

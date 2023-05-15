@@ -101,12 +101,13 @@ const ListProducts = ({ setModalS }) => {
               }
             })
             if (key === 'info') {
+              const infoArr = []
               responseInfo[key].forEach((item) => {
                 const title = item.title
                 const description = item.description
-
-                dataRes['info'] = [`${title}: ${description}`]
+                infoArr.push(`${title}: ${description}`)
               })
+              dataRes['info'] = infoArr
             }
           }
 
@@ -117,7 +118,7 @@ const ListProducts = ({ setModalS }) => {
             img: product.img,
             count: product.count,
             isActive: product.isActive,
-            info: dataRes.info,
+            info: dataRes.info.join('\n'),
             category: dataRes.category,
             brand: dataRes.brand,
           }

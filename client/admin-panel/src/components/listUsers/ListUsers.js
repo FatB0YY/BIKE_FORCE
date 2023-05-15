@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import Table from '../table/Table'
 import RolesService from '../../services/RolesService'
-const AddUsers = () => {
+const ListUsers = () => {
   const [data, setData] = useState([])
   const { users, userRoleForValid, userRoleId } = useSelector((state) => state)
 
@@ -37,21 +37,19 @@ const AddUsers = () => {
 
   useEffect(() => {
     if (users && users.length > 0) {
-      const fetchId = async (id) => {
-        const roleId = await RolesService.getUserRoles(id)
-        console.log(roleId)
-        return roleId.description
-      }
-
       const fetchData = async () => {
         const promises = users.map(async (user) => {
-          const roleId = await fetchId(user.id)
+          const infoArr = []
+          const roleId = await RolesService.getUserRoles(user.id)
+          roleId.forEach((item) => {
+            infoArr.push(item.description)
+          })
           return {
             email: user.email,
             id: user.id,
             banReason: user.banReason,
             isActive: user.isActive,
-            role: roleId,
+            role: infoArr.join('\n'),
           }
         })
         const filteredProduct = await Promise.all(promises)
@@ -71,4 +69,4 @@ const AddUsers = () => {
   )
 }
 
-export default AddUsers
+export default ListUsers

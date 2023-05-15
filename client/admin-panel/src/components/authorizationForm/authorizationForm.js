@@ -40,18 +40,19 @@ const AuthorizationForm = () => {
       localStorage.setItem('token', response.data.accessToken)
       dispatch(setAuthMenu(true))
       dispatch(setUser(response.data.user))
-      //const userRoles = await RolesService.getUserRoles(response.data.user.id)
-      //if (userRoles.value === 'ADMIN') {
-      navigate('/product')
-      // } else {
-      //   navigate('/&')
-      // }
+      const userRoles = await RolesService.getUserRoles(response.data.user.id)
+      if (userRoles.value === 'ADMIN') {
+        navigate('/product')
+      } else {
+        navigate('/&')
+      }
     } catch (e) {
       console.log('Ошибка при авторизации:', e.response)
       setErrorText(valid(refEmail, refPassword, e.response.data))
       setErrorBool(true)
     }
   }
+
   return (
     <div className='authorization-overlay'>
       <form

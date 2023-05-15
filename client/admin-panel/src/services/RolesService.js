@@ -4,12 +4,13 @@ export default class RolesService {
   static getRoles() {
     return $api.get('/role')
   }
-  static setRole(value, description) {
-    return $api.post('/role', { value, description })
+  static async setRole(value, description) {
+    const response = await $api.post('/role', { value, description })
+    return response
   }
   static async getUserRoles(id) {
     const res = await $api.get(`/role/getUserRoles/?userId=${id} `)
-    return res.data[0]
+    return res.data
   }
   static async addUserRoles(userId, roles) {
     const res = await $api.post(`/role/addRole`, { userId, roles })

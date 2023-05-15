@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import Table from '../table/Table'
 
-const AddBrands = () => {
+const ListBrands = () => {
   const { brand } = useSelector((state) => state)
 
   const [data, setData] = useState([])
@@ -52,4 +52,4 @@ const AddBrands = () => {
   )
 }
 
-export default AddBrands
+export default ListBrands

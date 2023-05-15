@@ -1,10 +1,7 @@
-import AddCategories from "../components/addСategories/AddCategories";
+import AddCategories from '../components/listCategories/ListCategories'
 
 const CategoryPage = () => {
-    return (
-        <AddCategories/>
-    )
+  return <AddCategories />
 }
-  
 
-export default CategoryPage;
+export default CategoryPage

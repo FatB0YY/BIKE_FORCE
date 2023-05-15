@@ -1,9 +1,7 @@
-import AddBrands from "../components/addBrands/addBrands";
+import AddBrands from '../components/listBrands/ListBrands'
 
 const BrandPage = () => {
-    return (
-        <AddBrands/>
-    )
+  return <AddBrands />
 }
 
-export default BrandPage;
+export default BrandPage

@@ -2,7 +2,8 @@ import $api from '../hooks/useHttp'
 
 export default class BrandsService {
   static async postBrands(name) {
-    return $api.post('/brand', { name })
+    const response = await $api.post('/brand', { name })
+    return response
   }
   static async getBrands() {
     const response = await $api.get('/brand')

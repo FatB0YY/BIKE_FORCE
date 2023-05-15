@@ -21,7 +21,6 @@ import {
 import DefaultColumnFilter from '../filters/defaultColumnFilter/DefaultColumnFilter'
 import './table.scss'
 
-// prettier-ignore
 function fuzzyTextFilterFn(rows, id, filterValue) {
   return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] })
 }
@@ -123,7 +122,6 @@ const Table = ({ columns, data, styles, pages }) => {
   const handleDeleteSelectedRows = (e) => {
     e.preventDefault()
     const selectedRows = selectedFlatRows.map((row) => row.original.id)
-    console.log(selectedRows)
     onDelete(selectedRows, pages)
   }
 
@@ -135,7 +133,6 @@ const Table = ({ columns, data, styles, pages }) => {
     Promise.all(deleteRequests)
       .then((res) => res.forEach((item) => dispatch(valueDeleted(ids, page))))
       .catch((err) => console.log(err))
-    // eslint-disable-next-line
   }
 
   const handleUsersSelectedRows = async (e) => {
@@ -144,7 +141,7 @@ const Table = ({ columns, data, styles, pages }) => {
     if (selectedRows.length === 1) {
       dispatch(setValidMessage(''))
       const res = await RolesService.getUserRoles(selectedRows)
-      dispatch(setUserRoleForValid(res.value))
+      dispatch(setUserRoleForValid(res[0].value))
       dispatch(setUserRoleId(+selectedRows.join('')))
     } else if (selectedRows.length > 1) {
       dispatch(setValidMessage('Надо выбрать 1 пользователя!'))
