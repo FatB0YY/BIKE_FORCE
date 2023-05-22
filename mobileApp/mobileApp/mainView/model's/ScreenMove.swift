@@ -18,5 +18,5 @@ enum Path{
     case enterV
     case mainV
     case cartV
-    case productV
+//    case productV
 }

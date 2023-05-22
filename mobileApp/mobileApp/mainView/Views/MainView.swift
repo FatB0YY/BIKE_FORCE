@@ -27,7 +27,7 @@ struct MainView: View {
                             .environmentObject(cartManager)
                     case .enterV: enterView()
                     case .mainV: MainView()
-                    case .productV: ProductMainView()
+//                    case .productV: ProductMainView()
                             
                     }
                     
