@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useAppDispatch } from '@/hooks/redux'
 import { addToCart } from '@/redux/reducers/UserSlice'
 import { IProductPropsId } from '@/types'
+import bikeImage from '../img/webImage.jpg'
 
 const ProductItem = ({ product, brand, category }: IProductPropsId) => {
   const dispatch = useAppDispatch()
@@ -19,7 +20,7 @@ const ProductItem = ({ product, brand, category }: IProductPropsId) => {
           {/* image */}
           <div className='w-[200px] mx-auto flex justify-center items-center'>
             <Image
-              src={`${process.env.API_URL_WITHOUT_API}${img}`}
+              src={bikeImage}
               alt={name}
               quality={100}
               width={Number(process.env.SIZE_WIDTH_PRODUCT_LIST)}

@@ -7,37 +7,21 @@ class UserController
     + logout(req, res, next)
     + refresh(req, res, next)
     + getUsers(req, res, next)
-    + ban(req, res, next)
 }
 
-class RoleController
+class FileController
 {
-    + create(req, res, next)
-    + addRole(req, res, next)
-    + getAll(req, res, next)
-    + getRoleByName(req, res, next)
-    + getUserRoles(req, res, next)
-}
-
-class ProductController
-{
-    + create(req, res, next)
-    + getAll(req, res, next)
-    + getOne(req, res, next)
-    + delete(req, res, next)
-}
-
-class CategoryController {
-    + create(req, res, next)
-    + getAll(req, res, next)
-    + delete(req, res, next)
-}
-
-class BrandController 
-{
-    + create(req, res, next)
-    + getAll(req, res, next)
-    + delete(req, res, next)
+    + createDir(req, res, next)
+    + getFiles(req, res, next)
+    + uploadFile(req, res, next)
+    + downloadFile(req, res, next)
+    + deleteFile(req, res, next)
+    + searchFile(req, res, next)
+    + uploadAvatar(req, res, next)
+    + deleteAvatar(req, res, next)
+    + downloadFolder(req, res, next)
+    + uploadFolder(req, res, next)
+    + checkFile(req, res, next)
 }
 
 class ApiError
@@ -56,9 +40,12 @@ class UserDTO
  - id: Number
  - email: String
  - password: String
- - isActive: Boolean
- - isBan: Boolean
- - banReason: String
+ - surname: String
+ - name: String
+ - usedSpace: Number
+ - diskSpace: Number
+ - avatar: String
+ - files: String[]
 }
 
 class UserService
@@ -72,7 +59,7 @@ class UserService
 
 class TokenService
 {
-    +  generateTokens(payload: UserDTO) 
+    + generateTokens(payload: UserDTO) 
     + saveToken(userId: number, refreshToken: string) 
     + removeToken(refreshToken: string) 
     + findToken(refreshToken: string) 
@@ -80,39 +67,29 @@ class TokenService
     + validateRefreshToken(token: string)
 }
 
-class RoleService
+class FileService
 {
-    + getRolesFromDb(roles: IRole[])
-    + saveUserRoleTable(rolesDb: Model[], user: IUserAttributes)
-    + addRole(user: any, roles: IRole[]) 
-    + getUserRoles(userId: number) 
+    + createDir(file: IFile, user: IUser)
+    + getPath(file: IFile)
+    + deleteFile(file: IFile, user: IUser)
+    + deleteFolderRecursive(folder, user)
 }
 
-class CategoryService
-{
-    + create(name: string)
-}
-
-class BrandService
-{
-    + create(name: string)
-}
 
 
 UserController .. UserService
-RoleController .. RoleService
-CategoryController .. CategoryService
-BrandController .. BrandService
+FileController .. FileService
+
 
 UserService .. TokenService
-UserController .. UserDTO
 TokenService .. UserDTO
 
 UserController .. ApiError
-RoleController .. ApiError
-CategoryController .. ApiError
-BrandController .. ApiError
-ProductController .. ApiError
+FileController .. ApiError
+FileService .. ApiError
+UserService .. ApiError
+TokenService .. ApiError
+
 
 
 

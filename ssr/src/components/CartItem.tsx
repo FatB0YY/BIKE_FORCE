@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import BikeImage from '../img/webImage.jpg'
 
 interface IPropsProductInCartItem {
   productInCart: IProductInCart
@@ -26,7 +27,7 @@ const CartItem = ({ productInCart }: IPropsProductInCartItem) => {
           <Image
             className='max-w-[80px]'
             alt={name}
-            src={`${process.env.API_URL_WITHOUT_API}${img}`}
+            src={BikeImage}
             width={80}
             height={150}
           />
