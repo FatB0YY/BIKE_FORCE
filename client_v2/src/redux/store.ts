@@ -4,7 +4,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 // import uploadReducer from './reducers/UploadSlice'
 // import { filesAPI } from '../service/FilesAPI'
 // import { userAPI } from '../service/UserAPI'
-import { rtkAPI } from '../service/RTK/rtkAPI'
+import { rtkAPI } from '../service/rtkAPI'
 
 const rootReducer = combineReducers({
   //   userReducer,
