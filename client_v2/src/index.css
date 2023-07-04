@@ -9,3 +9,11 @@
   margin: 0;
   padding: 0;
 }
+
+.sidebar.active {
+  color: rgb(79 70 229);
+}
+
+.sidebar.active .sidebar__line {
+  transform: scale(1, 1) translateX(0);
+}

@@ -14,7 +14,6 @@ export interface IProduct {
   name: string
   price: number
   img: string
-  count: number
   isActive: boolean
   CategoryId: number
   BrandId: number

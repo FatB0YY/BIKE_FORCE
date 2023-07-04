@@ -14,5 +14,6 @@ router.post('/logout', userController.logout)
 router.get('/refresh', userController.refresh)
 router.get('/users', checkRoleMiddleware(UserRoleAdmin.ADMIN), userController.getUsers)
 router.post('/ban', checkRoleMiddleware(UserRoleAdmin.ADMIN), userController.ban)
+router.get('/getOneUser/:userId', userController.getOneUser)
 
 export default router

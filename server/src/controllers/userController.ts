@@ -101,6 +101,22 @@ class UserController {
       next(error)
     }
   }
+
+  async getOneUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.params.userId
+
+      const user = await User.findByPk(userId)
+
+      if (!user) {
+        throw ApiError.BadRequest('Пользователь не найден')
+      }
+
+      return res.json(user)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export default new UserController()
