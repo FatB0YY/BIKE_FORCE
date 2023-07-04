@@ -11,7 +11,7 @@ const { __dirname, __filename } = fileDirName(import.meta)
 class ProductController {
   async create(req: any, res: Response, next: NextFunction) {
     try {
-      let { name, price, BrandId, CategoryId, info, count } = req.body
+      let { name, price, BrandId, CategoryId, info } = req.body
 
       if (!req.files) {
         throw ApiError.BadRequest('req.files is undefined')
@@ -49,7 +49,6 @@ class ProductController {
         BrandId,
         CategoryId,
         img: fileName,
-        count,
       })) as any
 
       if (info) {

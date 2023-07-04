@@ -60,21 +60,25 @@ const start = async () => {
         const hashPassword = await bcrypt.hash(password.toString(), salt)
 
         if (hashPassword) {
-          ;(await model.User.create({
-            id: 1,
+          const adminUser = (await model.User.create({
             email,
             password: hashPassword!,
           })) as unknown as IUserAttributes
+
+          // Связываем пользователя с ролью ADMIN
+          if (adminUser) {
+            const adminRole = (await model.Role.findOne({ where: { value: 'ADMIN' } })) as unknown as any
+
+            if (adminRole) {
+              await model.UserRole.create({
+                UserId: adminUser.id,
+                RoleId: adminRole.id,
+              })
+              console.log('Admin user has been created')
+            }
+          }
         }
       }
-
-      // Связываем пользователя с ролью ADMIN
-      await model.UserRole.create({
-        id: 1,
-        UserId: 1,
-        RoleId: 1,
-      })
-      console.log('Admin user has been created')
     }
 
     app.listen(PORT, () => {
@@ -85,4 +89,5 @@ const start = async () => {
     process.exit(1)
   }
 }
+
 start()
