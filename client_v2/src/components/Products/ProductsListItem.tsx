@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { IProduct } from '../../types/Product'
-import config from '../../config'
 import { AiFillDelete } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 import { IoMdOpen } from 'react-icons/io'

@@ -6,7 +6,7 @@ import UsersForm from '../components/Users/Form/UsersForm'
 
 const UsersPage = () => {
   // state redux
-  const { isModal } = useAppSelector((state) => state.app)
+  const isModal = useAppSelector((state) => state.app.isModal)
 
   return (
     <main className='flex-1'>

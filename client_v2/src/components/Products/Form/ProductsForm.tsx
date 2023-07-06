@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { defaultProperties } from '../../../redux/slices/ProductsSlice'
+import { productsActions } from '../../../redux/slices/ProductsSlice'
 import ProductProperties from '../ProductProperties'
 import { IInfo } from '../../../types/Product'
-import { useAppDispatch, useAppSelector } from '../../../hooks/redux'
+import { useActionCreators, useAppSelector } from '../../../hooks/redux'
 import { useCreateProductMutation } from '../../../service/ProductsAPI'
 import { useLazyGetAllCategoriesQuery } from '../../../service/CategoriesAPI'
 import { useLazyGetAllBrandsQuery } from '../../../service/BrandsAPI'
@@ -22,9 +22,9 @@ interface MyForm {
 
 const ProductsForm = () => {
   // dispatch
-  const dispatch = useAppDispatch()
+  const actionsProducts = useActionCreators(productsActions)
   // state redux
-  const { properties } = useAppSelector((state) => state.product)
+  const properties = useAppSelector((state) => state.product.properties)
   // state react
   const [flagCategory, setFlagCategory] = useState(true)
   const [flagBrand, setFlagBrand] = useState(true)
@@ -74,7 +74,7 @@ const ProductsForm = () => {
 
     clearErrors()
     reset()
-    dispatch(defaultProperties())
+    actionsProducts.defaultProperties()
   }
 
   const handleGetCategories = async (event: any) => {
@@ -83,6 +83,11 @@ const ProductsForm = () => {
 
     if (flagCategory) {
       await getAllCategories()
+        .unwrap()
+        .catch((error) => {
+          console.error(error)
+          // Обработка ошибки
+        })
     }
 
     setFlagCategory(!flagCategory)
@@ -94,6 +99,11 @@ const ProductsForm = () => {
 
     if (flagBrand) {
       await getAllBrands()
+        .unwrap()
+        .catch((error) => {
+          console.error(error)
+          // Обработка ошибки
+        })
     }
 
     setFlagBrand(!flagBrand)

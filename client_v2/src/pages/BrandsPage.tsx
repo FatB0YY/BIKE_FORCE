@@ -1,6 +1,6 @@
 import React from 'react'
-import { setIsModal } from '../redux/slices/AppSlice'
-import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { appActions } from '../redux/slices/AppSlice'
+import { useActionCreators, useAppSelector } from '../hooks/redux'
 import { AiOutlinePlus } from 'react-icons/ai'
 import Modal from '../components/Modal'
 import BrandsForm from '../components/Brands/Form/BrandsForm'
@@ -8,15 +8,15 @@ import BrandsList from '../components/Brands/BrandsList'
 
 const BrandsPage = () => {
   // dispatch
-  const dispatch = useAppDispatch()
+  const actionsApp = useActionCreators(appActions)
   // state redux
-  const { isModal } = useAppSelector((state) => state.app)
+  const isModal = useAppSelector((state) => state.app.isModal)
 
   const handleCreateItem = (event: any) => {
     event.preventDefault()
     event.stopPropagation()
 
-    dispatch(setIsModal(true))
+    actionsApp.setIsModal(true)
   }
 
   return (

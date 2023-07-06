@@ -1,6 +1,6 @@
 import React from 'react'
-import { useAppDispatch } from '../../hooks/redux'
-import { setPage } from '../../redux/slices/ProductsSlice'
+import { useActionCreators } from '../../hooks/redux'
+import { productsActions } from '../../redux/slices/ProductsSlice'
 
 interface IPropsPaginationItem {
   active: boolean
@@ -8,13 +8,13 @@ interface IPropsPaginationItem {
 }
 
 const PaginationItem = ({ page, active }: IPropsPaginationItem) => {
-  const dispatch = useAppDispatch()
+  const actionsProducts = useActionCreators(productsActions)
 
   const clickPageHandler = (event: any) => {
     event.stopPropagation()
     event.preventDefault()
 
-    dispatch(setPage(page))
+    actionsProducts.setPage(page)
   }
 
   if (active) {

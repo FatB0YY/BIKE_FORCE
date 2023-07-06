@@ -3,22 +3,12 @@ import { categoriesAPI } from '../../service/CategoriesAPI'
 import { IError } from '../../types/Error'
 import { toast } from 'react-toastify'
 
-interface ICategoriesState {
-  CategoryId: number | null
-}
+const initialState = {}
 
-const initialState: ICategoriesState = {
-  CategoryId: null,
-}
-
-export const categoriesSlice = createSlice({
+const categoriesSlice = createSlice({
   name: 'categoriesSlice',
   initialState,
-  reducers: {
-    setCategoryId: (state, action) => {
-      state.CategoryId = action.payload
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(categoriesAPI.endpoints.createCategory.matchRejected, (state, action: PayloadAction<any>) => {
       action.payload?.data.errors.forEach((error: IError) => {
@@ -38,5 +28,4 @@ export const categoriesSlice = createSlice({
   },
 })
 
-export default categoriesSlice.reducer
-export const { setCategoryId } = categoriesSlice.actions
+export const { reducer: categoriesReducer, actions: categoriesActions } = categoriesSlice

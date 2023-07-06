@@ -14,7 +14,7 @@ const initialState: UserState = {
   user: null,
 }
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: 'authSlice',
   initialState,
   reducers: {
@@ -42,7 +42,7 @@ export const authSlice = createSlice({
       state.user = action.payload.user
     })
     // Rejected
-    builder.addMatcher(authAPI.endpoints.login.matchRejected, (state, action: any) => {
+    builder.addMatcher(authAPI.endpoints.login.matchRejected, (state, action: PayloadAction<any>) => {
       if (action.payload.data.errors.length > 0) {
         action.payload.data.errors.forEach((error: { message: string }) => {
           toast.error(error.message)
@@ -52,7 +52,7 @@ export const authSlice = createSlice({
       }
       state.user = null
     })
-    builder.addMatcher(authAPI.endpoints.registration.matchRejected, (state, action: any) => {
+    builder.addMatcher(authAPI.endpoints.registration.matchRejected, (state, action: PayloadAction<any>) => {
       if (action.payload.data.errors.length > 0) {
         action.payload.data.errors.forEach((error: { message: string }) => {
           toast.error(error.message)
@@ -65,6 +65,5 @@ export const authSlice = createSlice({
   },
 })
 
-export default authSlice.reducer
-export const { setUser, logOut } = authSlice.actions
+export const { reducer: authReducer, actions: authActions } = authSlice
 export const selectCurrentUser = (state: RootState) => state.auth.user

@@ -1,22 +1,22 @@
 import React from 'react'
 import RolesList from '../components/Roles/RolesList'
-import { useAppDispatch, useAppSelector } from '../hooks/redux'
-import { setIsModal } from '../redux/slices/AppSlice'
+import { useActionCreators, useAppSelector } from '../hooks/redux'
+import { appActions } from '../redux/slices/AppSlice'
 import { AiOutlinePlus } from 'react-icons/ai'
 import RolesForm from '../components/Roles/Form/RolesForm'
 import Modal from '../components/Modal'
 
 const RolesPage = () => {
   // dispatch
-  const dispatch = useAppDispatch()
+  const actionsApp = useActionCreators(appActions)
   // redux state
-  const { isModal } = useAppSelector((state) => state.app)
+  const isModal = useAppSelector((state) => state.app.isModal)
 
   const handleCreateItem = (event: any) => {
     event.preventDefault()
     event.stopPropagation()
 
-    dispatch(setIsModal(true))
+    actionsApp.setIsModal(true)
   }
 
   return (

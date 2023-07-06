@@ -9,6 +9,7 @@ import Image from 'next/image'
 
 const Header = () => {
   const { isOpenSidebar, itemAmountInCart, cart } = useAppSelector((state) => state.UserReducer)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {

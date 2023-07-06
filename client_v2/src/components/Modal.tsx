@@ -1,16 +1,17 @@
 import React from 'react'
-import { setIsModal } from '../redux/slices/AppSlice'
-import { useAppDispatch } from '../hooks/redux'
-import { setCurrentUserBan } from '../redux/slices/UsersSlice'
+import { appActions } from '../redux/slices/AppSlice'
+import { useActionCreators } from '../hooks/redux'
+import { usersActions } from '../redux/slices/UsersSlice'
 
 const Modal = ({ children }: any) => {
-  const dispatch = useAppDispatch()
+  const actionsApp = useActionCreators(appActions)
+  const actionsUsers = useActionCreators(usersActions)
 
   const handleCloseModal = (event: any) => {
     event.preventDefault()
     event.stopPropagation()
-    dispatch(setIsModal(false))
-    dispatch(setCurrentUserBan(null))
+    actionsApp.setIsModal(false)
+    actionsUsers.setCurrentUserBan(null)
   }
 
   return (

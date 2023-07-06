@@ -20,7 +20,7 @@ const initialState: IProductsState = {
   properties: [{ title: '', description: '' }],
 }
 
-export const productsSlice = createSlice({
+const productsSlice = createSlice({
   name: 'productsSlice',
   initialState,
   reducers: {
@@ -52,6 +52,4 @@ export const productsSlice = createSlice({
   extraReducers: (builder) => {},
 })
 
-export default productsSlice.reducer
-export const { defaultProperties, setPage, setTotalCount, setLimit, removeProperties, setProperties, addNewProp } =
-  productsSlice.actions
+export const { reducer: productsReducer, actions: productsActions } = productsSlice

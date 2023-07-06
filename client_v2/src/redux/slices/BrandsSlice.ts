@@ -1,24 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { brandsAPI } from '../../service/BrandsAPI'
 import { toast } from 'react-toastify'
-import { IError, IErrorResponse } from '../../types/Error'
+import { IError } from '../../types/Error'
 
-interface IBrandsState {
-  BrandId: number | null
-}
+const initialState = {}
 
-const initialState: IBrandsState = {
-  BrandId: null,
-}
-
-export const brandsSlice = createSlice({
+const brandsSlice = createSlice({
   name: 'brandsSlice',
   initialState,
-  reducers: {
-    setBrandId: (state, action) => {
-      state.BrandId = action.payload
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(brandsAPI.endpoints.createBrand.matchRejected, (state, action: PayloadAction<any>) => {
       action.payload?.data.errors.forEach((error: IError) => {
@@ -38,5 +28,4 @@ export const brandsSlice = createSlice({
   },
 })
 
-export default brandsSlice.reducer
-export const { setBrandId } = brandsSlice.actions
+export const { reducer: brandsReducer, actions: brandsActions } = brandsSlice

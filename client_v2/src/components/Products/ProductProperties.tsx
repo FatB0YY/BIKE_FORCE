@@ -1,10 +1,10 @@
 import React from 'react'
-import { useAppDispatch, useAppSelector } from '../../hooks/redux'
-import { addNewProp, removeProperties, setProperties } from '../../redux/slices/ProductsSlice'
+import { useActionCreators, useAppSelector } from '../../hooks/redux'
+import { productsActions } from '../../redux/slices/ProductsSlice'
 
 const ProductProperties = () => {
-  const dispatch = useAppDispatch()
-  const { properties } = useAppSelector((state) => state.product)
+  const properties = useAppSelector((state) => state.product.properties)
+  const actionsProducts = useActionCreators(productsActions)
 
   const handleChange = (index: number, e: any) => {
     const { name, value } = e.target
@@ -12,15 +12,15 @@ const ProductProperties = () => {
     const updatedProperties = [...properties]
     updatedProperties[index] = { ...updatedProperties[index], [name]: value }
 
-    dispatch(setProperties(updatedProperties))
+    actionsProducts.setProperties(updatedProperties)
   }
 
   const handleAddProperty = () => {
-    dispatch(addNewProp())
+    actionsProducts.addNewProp()
   }
 
   const handleRemoveProperty = (index: number) => {
-    dispatch(removeProperties(index))
+    actionsProducts.removeProperties(index)
   }
 
   return (

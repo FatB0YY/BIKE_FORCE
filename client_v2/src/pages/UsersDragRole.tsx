@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetOneQuery } from '../service/UsersAPI'
 import { useAddRoleMutation, useGetAllRolesQuery, useLazyGetUserRolesQuery } from '../service/RolesAPI'
-import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { useActionCreators, useAppSelector } from '../hooks/redux'
 import { IRole } from '../types/Role'
-import { pushToBoardCurrentUserRoles, removeRoleFromBoardAllRoles, setCurrentRole } from '../redux/slices/UsersSlice'
+import { usersActions } from '../redux/slices/UsersSlice'
 
 const UsersDragRole = () => {
   // dispatch
-  const dispatch = useAppDispatch()
+  const actionsUsers = useActionCreators(usersActions)
   // react router dom
   const { userId } = useParams()
   // rtk query
@@ -17,7 +17,9 @@ const UsersDragRole = () => {
   const [lazyGetUserRoles, { isLoading: isLoadingLazyGetUserRoles }] = useLazyGetUserRolesQuery()
   const [addRole, { isLoading: isLoadingAddRole }] = useAddRoleMutation()
   // redux state
-  const { boardAllRoles, boardCurrentUserRoles, currentRole } = useAppSelector((state) => state.user)
+  const boardAllRoles = useAppSelector((state) => state.user.boardAllRoles)
+  const boardCurrentUserRoles = useAppSelector((state) => state.user.boardCurrentUserRoles)
+  const currentRole = useAppSelector((state) => state.user.currentRole)
 
   useEffect(() => {
     if (user && userId) {
@@ -39,11 +41,11 @@ const UsersDragRole = () => {
   function dragLeaveHandler(event: any): void {}
 
   function dragStartHandler(event: any, item: any): void {
-    dispatch(setCurrentRole(item))
+    actionsUsers.setCurrentRole(item)
   }
 
   function dragEndHandler(event: any): void {
-    dispatch(setCurrentRole(null))
+    actionsUsers.setCurrentRole(null)
   }
 
   function dropHandler(event: any): void {
@@ -54,8 +56,8 @@ const UsersDragRole = () => {
     event.preventDefault()
     event.stopPropagation()
 
-    dispatch(pushToBoardCurrentUserRoles(currentRole))
-    dispatch(removeRoleFromBoardAllRoles(currentRole))
+    actionsUsers.pushToBoardCurrentUserRoles(currentRole!)
+    actionsUsers.removeRoleFromBoardAllRoles(currentRole!)
   }
 
   const handleSave = async (event: any) => {
@@ -67,6 +69,11 @@ const UsersDragRole = () => {
     })
 
     await addRole({ userId: Number(userId), roles: newRoles })
+      .unwrap()
+      .catch((error) => {
+        console.error(error)
+        // Обработка ошибки
+      })
   }
 
   return (
