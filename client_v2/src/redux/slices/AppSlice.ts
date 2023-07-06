@@ -4,7 +4,7 @@ const initialState = {
   isModal: false,
 }
 
-export const appSlice = createSlice({
+const appSlice = createSlice({
   name: 'appSlice',
   initialState,
   reducers: {
@@ -15,5 +15,4 @@ export const appSlice = createSlice({
   extraReducers: (builder) => {},
 })
 
-export default appSlice.reducer
-export const { setIsModal } = appSlice.actions
+export const { reducer: appReducer, actions: appActions } = appSlice

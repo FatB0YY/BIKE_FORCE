@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { IUser } from '../../types/User'
 import { FaBan } from 'react-icons/fa'
-import { useAppDispatch } from '../../hooks/redux'
-import { setIsModal } from '../../redux/slices/AppSlice'
-import { setCurrentUserBan } from '../../redux/slices/UsersSlice'
+import { useActionCreators } from '../../hooks/redux'
+import { appActions } from '../../redux/slices/AppSlice'
+import { usersActions } from '../../redux/slices/UsersSlice'
 import BanReasonComponent from './BanReasonComponent'
 import { MdAdminPanelSettings } from 'react-icons/md'
 import { Link } from 'react-router-dom'
@@ -14,13 +14,14 @@ interface IPropsUsersListItem {
 
 const UsersListItem: FC<IPropsUsersListItem> = ({ user }) => {
   // dispatch
-  const dispatch = useAppDispatch()
+  const actionsUsers = useActionCreators(usersActions)
+  const actionsApp = useActionCreators(appActions)
 
   const handleBanItem = async (event: any) => {
     event.preventDefault()
     event.stopPropagation()
-    dispatch(setCurrentUserBan(user.id))
-    dispatch(setIsModal(true))
+    actionsUsers.setCurrentUserBan(user.id)
+    actionsApp.setIsModal(true)
   }
 
   return (

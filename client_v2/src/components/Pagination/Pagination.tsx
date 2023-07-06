@@ -3,7 +3,10 @@ import PaginationItem from './PaginationItem'
 import { useAppSelector } from '../../hooks/redux'
 
 const Pagination = () => {
-  const { totalCount, page, limit } = useAppSelector((state) => state.product)
+  const totalCount = useAppSelector((state) => state.product.totalCount)
+  const page = useAppSelector((state) => state.product.page)
+  const limit = useAppSelector((state) => state.product.limit)
+
   const pageCount = Math.ceil(totalCount / limit)
   const pages = []
 

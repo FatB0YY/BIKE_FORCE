@@ -2,8 +2,8 @@ import React from 'react'
 import { useBanMutation } from '../../../service/UsersAPI'
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import SpinnerButton from '../../SpinnerButton'
-import { useAppDispatch, useAppSelector } from '../../../hooks/redux'
-import { setCurrentUserBan } from '../../../redux/slices/UsersSlice'
+import { useActionCreators, useAppSelector } from '../../../hooks/redux'
+import { usersActions } from '../../../redux/slices/UsersSlice'
 
 interface MyForm {
   banReason: string
@@ -11,9 +11,9 @@ interface MyForm {
 
 const UsersForm = () => {
   // dispatch
-  const dispatch = useAppDispatch()
+  const actionsUsers = useActionCreators(usersActions)
   // redux
-  const { currentUserBan: userId } = useAppSelector((state) => state.user)
+  const userId = useAppSelector((state) => state.user.currentUserBan)
   // rtk query
   const [banUser, { isLoading: isLoadingBanUser }] = useBanMutation()
   // react hook form
@@ -37,14 +37,14 @@ const UsersForm = () => {
 
     clearErrors()
     reset()
-    dispatch(setCurrentUserBan(null))
+    actionsUsers.setCurrentUserBan(null)
   }
 
   const onInValidSubmit: SubmitErrorHandler<MyForm> = (data) => {
     console.log('data', data)
     clearErrors()
     reset()
-    dispatch(setCurrentUserBan(null))
+    actionsUsers.setCurrentUserBan(null)
   }
 
   const isValidBanReason = (banReason: string) => {

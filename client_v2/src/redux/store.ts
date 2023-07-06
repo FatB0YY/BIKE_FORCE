@@ -1,11 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import appReducer from './slices/AppSlice'
-import productReducer from './slices/ProductsSlice'
-import rolesReducer from './slices/RolesSlice'
-import authReducer from './slices/AuthSlice'
-import brandsRudecur from './slices/BrandsSlice'
-import categoriesReducer from './slices/CategoriesSlice'
-import usersReducer from './slices/UsersSlice'
+import { appReducer } from './slices/AppSlice'
+import { productsReducer } from './slices/ProductsSlice'
+import { rolesReducer } from './slices/RolesSlice'
+import { authReducer } from './slices/AuthSlice'
+import { brandsReducer } from './slices/BrandsSlice'
+import { categoriesReducer } from './slices/CategoriesSlice'
+import { usersReducer } from './slices/UsersSlice'
 import { rolesAPI } from '../service/RolesAPI'
 import { brandsAPI } from '../service/BrandsAPI'
 import { productsAPI } from '../service/ProductsAPI'
@@ -18,8 +18,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
   role: rolesReducer,
   app: appReducer,
-  product: productReducer,
-  brand: brandsRudecur,
+  product: productsReducer,
+  brand: brandsReducer,
   category: categoriesReducer,
   user: usersReducer,
   [authAPI.reducerPath]: authAPI.reducer,

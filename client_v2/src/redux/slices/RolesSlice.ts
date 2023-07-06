@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IRole } from '../../types/Role'
 import { rolesAPI } from '../../service/RolesAPI'
 
@@ -10,16 +10,18 @@ const initialState: RolesState = {
   currentUserRoles: null,
 }
 
-export const rolesSlice = createSlice({
+const rolesSlice = createSlice({
   name: 'rolesSlice',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addMatcher(rolesAPI.endpoints.getCurrentUserRoles.matchFulfilled, (state, action) => {
-      state.currentUserRoles = action.payload
-    })
+    builder.addMatcher(
+      rolesAPI.endpoints.getCurrentUserRoles.matchFulfilled,
+      (state, action: PayloadAction<IRole[]>) => {
+        state.currentUserRoles = action.payload
+      },
+    )
   },
 })
 
-export default rolesSlice.reducer
-export const {} = rolesSlice.actions
+export const { reducer: rolesReducer, actions: rolesActions } = rolesSlice
