@@ -29,7 +29,8 @@ const productsSlice = createSlice({
       state.properties = action.payload
     },
     removeProperties: (state, action: PayloadAction<number>) => {
-      state.properties = state.properties.filter((_, index) => index !== action.payload)
+      // state.properties = state.properties.filter((_, index) => index !== action.payload)
+      state.properties.splice(action.payload, 1)
     },
     addNewProp: (state) => {
       state.properties.push({ title: '', description: '' })
