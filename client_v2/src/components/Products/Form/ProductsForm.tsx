@@ -47,7 +47,7 @@ const ProductsForm = () => {
     for (let i = 0; i < properties.length; i++) {
       let obj = properties[i]
       // Проверяем, является ли объект пустым
-      if (Object.values(obj).every((value) => value === '')) {
+      if (Object.values(obj as any).every((value) => value === '')) {
         isValid = false
         break
       }
@@ -55,7 +55,7 @@ const ProductsForm = () => {
 
     const formData = new FormData()
 
-    formData.append('img', img[0])
+    formData.append('img', img[0] as any)
     formData.append('name', name.toLocaleLowerCase())
     formData.append('price', price)
     formData.append('BrandId', String(BrandId))

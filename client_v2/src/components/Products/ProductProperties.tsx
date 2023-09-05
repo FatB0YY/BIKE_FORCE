@@ -10,7 +10,7 @@ const ProductProperties = () => {
     const { name, value } = e.target
 
     const updatedProperties = [...properties]
-    updatedProperties[index] = { ...updatedProperties[index], [name]: value }
+    updatedProperties[index] = { ...updatedProperties[index], [name]: value } as any
 
     actionsProducts.setProperties(updatedProperties)
   }

@@ -1,0 +1,112 @@
+import { AuthResponse, IBrand, ICategory, IProduct, IProductResponse, IRole } from '@/types/index'
+
+const BASE_URL = process.env.API_URL
+
+export default class UserService {
+  // auth
+  static async login(email: string, password: string): Promise<AuthResponse> {
+    const response = await fetch(`${BASE_URL}/user/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch :(')
+    }
+
+    return response.json()
+  }
+
+  static async registration(email: string, password: string, roles: IRole[]): Promise<AuthResponse> {
+    const response = await fetch(`${BASE_URL}/user/registration`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password, roles }),
+    })
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch :(')
+    }
+
+    return response.json()
+  }
+
+  static async refresh(): Promise<AuthResponse> {
+    const response = await fetch(`${BASE_URL}/user/refresh`)
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch :(')
+    }
+
+    return response.json()
+  }
+
+  static async logout(): Promise<void> {
+    await fetch(`${BASE_URL}/user/logout`, {
+      method: 'POST',
+    })
+  }
+
+  // category
+  static async getAllCategory(): Promise<ICategory[]> {
+    const response = await fetch(`${BASE_URL}/category`, { cache: 'no-cache' })
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch :(')
+    }
+
+    return response.json()
+  }
+
+  // brand
+  static async getAllBrand(): Promise<IBrand[]> {
+    const response = await fetch(`${BASE_URL}/brand`, { cache: 'no-cache' })
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch :(')
+    }
+
+    return response.json()
+  }
+
+  // product
+  static async getAllProduct(
+    BrandId: number | null,
+    CategoryId: number | null,
+    limit: number,
+    page: number,
+  ): Promise<IProductResponse> {
+    const queryParams = new URLSearchParams({
+      BrandId: BrandId?.toString() || '',
+      CategoryId: CategoryId?.toString() || '',
+      limit: limit.toString(),
+      page: page.toString(),
+    })
+
+    const response = await fetch(`${BASE_URL}/product?${queryParams}`)
+    // - ssg
+    // cache: 'no-cache' - ssr
+    // next: { revalidate: 60 } - isr
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch :(')
+    }
+
+    return response.json()
+  }
+
+  static async getOneProduct(id: number): Promise<IProduct> {
+    const response = await fetch(`${BASE_URL}/product/${id}`)
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch :(')
+    }
+
+    return response.json()
+  }
+}

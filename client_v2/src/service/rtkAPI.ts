@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import config from '../config'
+import config from '../config/index'
 import { fetchBaseQuery } from '@reduxjs/toolkit/query'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Mutex } from 'async-mutex'
@@ -7,9 +7,8 @@ import Cookies from 'js-cookie'
 import { IAuthResponse } from '../types/Auth'
 
 const mutex = new Mutex()
-
 const baseQuery = fetchBaseQuery({
-  baseUrl: config.API_URL,
+  baseUrl: config.API_URL!,
   credentials: 'include',
   prepareHeaders: (headers) => {
     const accessToken = Cookies.get('accessToken')

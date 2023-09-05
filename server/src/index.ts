@@ -18,12 +18,15 @@ import fileUpload from 'express-fileupload'
 const { __dirname, __filename } = fileDirName(import.meta)
 const app: Express = express()
 
+const allowedOrigins = [process.env.CLIENT_URL_ADMINPANEL!, process.env.CLIENT_URL_MARKET!]
+
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL || '*',
+    origin: allowedOrigins || '*',
   }),
 )
+
 app.use(fileUpload({}))
 app.use(json())
 app.use(cookieParser())
