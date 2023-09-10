@@ -1,6 +1,6 @@
-import { useAppDispatch } from '@/hooks/redux'
 import { IProduct, IProductInCart, IUser } from '@/types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { RootState } from '../store'
 
 interface IUserState {
   user: IUser | null
@@ -141,20 +141,5 @@ export const UserSlice = createSlice({
   },
 })
 
-const { actions, reducer } = UserSlice
-export const {
-  setIsOpenSidebar,
-  addToCart,
-  removeFromCart,
-  clearCart,
-  increaseAmount,
-  decreaseAmount,
-  setItemAmountInCart,
-  setTotalPrice,
-  setPage,
-  setTotalCount,
-  setLimit,
-  setTabCategoryId,
-  setTabBrandId,
-} = actions
-export default reducer
+export const { reducer: userReducer, actions: userActions } = UserSlice
+export const selectCurrentUser = (state: RootState) => state.user.user

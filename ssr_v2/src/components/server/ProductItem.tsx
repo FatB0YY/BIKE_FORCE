@@ -1,42 +1,66 @@
-import React from 'react'
-import { faEye } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+'use client'
+
+import React, { FC, MouseEventHandler } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { IProductPropsId } from '@/types'
-import bikeImage from '@/img/webImage.jpg'
-import MyButton2 from '../client/MyButton2'
+import { useActionCreators } from '@/hooks/redux'
+import IconButton from '../client/IconButton'
+import { Expand, ShoppingCart } from 'lucide-react'
+import rfr from '@/img/webImage.jpg'
+import Currency from '../client/Currency'
+import { userActions } from '@/redux/reducers/UserSlice'
 
-const ProductItem = ({ product, brand, category }: IProductPropsId) => {
-  console.log('server2')
+const ProductItem: FC<IProductPropsId> = ({ product, brand, category }) => {
+  // dispatch
+  const actionsUser = useActionCreators(userActions)
+
+  const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation()
+    actionsUser.addToCart({ id: product.id, product: product })
+  }
 
   return (
-    <div>
-      <div className='border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group translate'>
-        <div className='w-full h-full flex justify-center items-center'>
-          {/* image */}
-          <div className='w-[200px] mx-auto flex justify-center items-center'>
-            <Image
-              src={bikeImage}
-              alt={product.name}
-              quality={100}
-              width={Number(process.env.SIZE_WIDTH_PRODUCT_LIST)}
-              height={Number(process.env.SIZE_HEIGHT_PRODUCT_LIST)}
-              className='max-h-[160px] group-hover:scale-110 transition duration-300'
+    <div className='bg-white group cursor-pointer rounded-xl border p-3 space-y-4'>
+      <div className='aspect-square rounded-xl bg-gray-100 relative'>
+        {/* image */}
+        <Image
+          src={rfr}
+          alt={product.name}
+          quality={100}
+          fill
+          className='aspect-square object-cover justify-center'
+        />
+
+        {/* buttons */}
+        <div className='opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5'>
+          <div className='flex gap-x-6 justify-center'>
+            <IconButton
+              onClick={() => {
+                return null
+              }}
+              icon={
+                <Link
+                  href={`/product/[id]`}
+                  as={`/product/${product.id}`}
+                >
+                  <Expand
+                    size={20}
+                    className={'text-gray-600'}
+                  />
+                </Link>
+              }
+            />
+            <IconButton
+              onClick={onAddToCart}
+              icon={
+                <ShoppingCart
+                  size={20}
+                  className={'text-gray-600'}
+                />
+              }
             />
           </div>
-        </div>
-        {/* buttons */}
-        <div className='absolute top-2 -right-11 group-hover:right-2  p-2 flex flex-col items-center justify-center gap-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300'>
-          <MyButton2 product={product} />
-
-          <Link
-            href={`/product/[id]`}
-            as={`/product/${product.id}`}
-            className='w-12 h-12 bg-white flex justify-center items-center text-primary drop-shadow-xl'
-          >
-            <FontAwesomeIcon icon={faEye} />
-          </Link>
         </div>
       </div>
       {/* category title brand*/}
@@ -51,7 +75,9 @@ const ProductItem = ({ product, brand, category }: IProductPropsId) => {
           <h2 className='font-semibold mb-1'>{product.name}</h2>
         </Link>
 
-        <div className='font-semibold'>$ {product.price}</div>
+        <div className='font-semibold'>
+          <Currency value={product.price} />
+        </div>
       </div>
     </div>
   )

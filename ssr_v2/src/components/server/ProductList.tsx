@@ -1,5 +1,7 @@
+import { FC } from 'react'
 import ProductItem from './ProductItem'
 import { IBrand, ICategory, IProduct } from '@/types'
+import NoResult from './NoResult'
 
 interface IProductsPageProps {
   products: IProduct[]
@@ -7,7 +9,7 @@ interface IProductsPageProps {
   categories: ICategory[]
 }
 
-const ProductList = ({ products, brands, categories }: IProductsPageProps) => {
+const ProductList: FC<IProductsPageProps> = ({ products, brands, categories }) => {
   const fictitiousBrand = {
     name: 'No brand',
     id: 0,
@@ -20,12 +22,11 @@ const ProductList = ({ products, brands, categories }: IProductsPageProps) => {
     isActive: false,
   }
 
-  console.log('server')
-
   return (
     <section className='py-16'>
       <div className='container mx-auto'>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0'>
+        {products.length === 0 && <NoResult />}
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0'>
           {products.map((product: IProduct) => (
             <ProductItem
               key={product.id}

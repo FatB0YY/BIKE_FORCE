@@ -85,3 +85,10 @@ export interface ITab {
   name: string
   isActive: boolean
 }
+
+export interface IQueryProducts {
+  BrandId?: number
+  CategoryId?: number
+  limit: number
+  page: number
+}

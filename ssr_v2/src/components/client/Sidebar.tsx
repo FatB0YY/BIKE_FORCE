@@ -1,23 +1,28 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { faArrowRight, faLeaf, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CartItem from './CartItem'
-import { useAppDispatch, useAppSelector } from '@/hooks/redux'
-import { clearCart, setIsOpenSidebar, setTotalPrice } from '@/redux/reducers/UserSlice'
+import { useActionCreators, useAppSelector } from '@/hooks/redux'
 import Link from 'next/link'
+import Currency from './Currency'
+import { userActions } from '@/redux/reducers/UserSlice'
 
 const Sidebar = () => {
-  const { isOpenSidebar, cart, totalPrice } = useAppSelector((state) => state.UserReducer)
-  const dispatch = useAppDispatch()
+  // dispatch
+  const actionsUser = useActionCreators(userActions)
+  // state redux
+  const isOpenSidebar = useAppSelector((state) => state.user.isOpenSidebar)
+  const cart = useAppSelector((state) => state.user.cart)
+  const totalPrice = useAppSelector((state) => state.user.totalPrice)
 
   useEffect(() => {
     const total: number = cart.reduce((accumulator: number, currentItem) => {
       return accumulator + currentItem.price * currentItem.amount
     }, 0)
 
-    dispatch(setTotalPrice(total))
+    actionsUser.setTotalPrice(total)
   }, [cart, totalPrice])
 
   return (
@@ -30,7 +35,7 @@ const Sidebar = () => {
         <div className='uppercase text-sm font-semibold'>Shopping Bag</div>
         {/* icon */}
         <div
-          onClick={() => dispatch(setIsOpenSidebar(false))}
+          onClick={() => actionsUser.setIsOpenSidebar(false)}
           className='cursor-pointer w-8 h-8 flex justify-center items-center'
         >
           <FontAwesomeIcon
@@ -51,11 +56,11 @@ const Sidebar = () => {
         <div className='flex w-full justify-between items-center'>
           {/* total */}
           <div className='uppercase font-semibold'>
-            <span className='mr-2'>Total:</span>$ {Number.parseFloat(String(totalPrice)).toFixed(2)}
+            <span className='mr-2'>Total:</span> {<Currency value={totalPrice} />}
           </div>
           {/* clear cart icon*/}
           <div
-            onClick={() => dispatch(clearCart())}
+            onClick={() => actionsUser.clearCart()}
             className='cursor-pointer py-4 bg-[#E4322C] text-white w-12 h-12 flex justify-center items-center text-xl'
           >
             <FontAwesomeIcon icon={faTrash} />

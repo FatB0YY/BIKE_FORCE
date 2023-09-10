@@ -1,47 +1,38 @@
-'use client'
-
-import { IProduct, IProductResponse } from '@/types'
-import Sidebar from './components/client/Sidebar'
-import Footer from './components/server/Footer'
-import Hero from './components/server/Hero'
-import ProductList from './components/server/ProductList'
+import { IBrand, ICategory, IProduct } from '@/types'
+import ProductList from '@/components/server/ProductList'
 import UserService from '@/services/UserService'
-import { useAppSelector } from '@/hooks/redux'
-import { useEffect, useState } from 'react'
+import Pagination from '@/components/client/Pagination'
 
-export default function Home() {
-  const { tabBrandId, tabCategoryId, page } = useAppSelector((state) => state.UserReducer)
-  const [products, setProducts] = useState<any[]>([])
+async function getProducts(): Promise<IProduct[]> {
+  const products = await UserService.getAllProduct({ limit: 8, page: 1 })
+  return products.rows
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await UserService.getAllProduct(
-          tabBrandId,
-          tabCategoryId,
-          Number(process.env.LIMIT_PRODUCT_ON_LIST)!,
-          page,
-        )
+async function getBrands(): Promise<IBrand[]> {
+  const brands = await UserService.getAllBrand()
+  return brands
+}
 
-        setProducts(response.rows)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
-    }
+async function getCategories(): Promise<ICategory[]> {
+  const categories = await UserService.getAllCategory()
+  return categories
+}
 
-    fetchData()
-  }, [])
+const Home = async () => {
+  const products = await getProducts()
+  const brands = await getBrands()
+  const categories = await getCategories()
 
   return (
     <>
-      <Hero />
-      <Sidebar />
       <ProductList
         products={products}
-        brands={products}
-        categories={products}
+        brands={brands}
+        categories={categories}
       />
-      <Footer />
+      <Pagination />
     </>
   )
 }
+
+export default Home

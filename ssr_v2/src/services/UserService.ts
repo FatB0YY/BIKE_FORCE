@@ -1,6 +1,7 @@
-import { AuthResponse, IBrand, ICategory, IProduct, IProductResponse, IRole } from '@/types/index'
+import { AuthResponse, IBrand, ICategory, IProduct, IProductResponse, IQueryProducts, IRole } from '@/types/index'
+import qs from 'query-string'
 
-const BASE_URL = process.env.API_URL
+const BASE_URL = process.env.API_URL!
 
 export default class UserService {
   // auth
@@ -75,23 +76,21 @@ export default class UserService {
   }
 
   // product
-  static async getAllProduct(
-    BrandId: number | null,
-    CategoryId: number | null,
-    limit: number,
-    page: number,
-  ): Promise<IProductResponse> {
-    const queryParams = new URLSearchParams({
-      BrandId: BrandId?.toString() || '',
-      CategoryId: CategoryId?.toString() || '',
-      limit: limit.toString(),
-      page: page.toString(),
+  static async getAllProduct(query: IQueryProducts): Promise<IProductResponse> {
+    const url = qs.stringifyUrl({
+      url: `${BASE_URL}/product?`,
+      query: {
+        BrandId: query.BrandId,
+        CategoryId: query.CategoryId,
+        limit: query.limit,
+        page: query.page,
+      },
     })
 
-    const response = await fetch(`${BASE_URL}/product?${queryParams}`)
-    // - ssg
-    // cache: 'no-cache' - ssr
-    // next: { revalidate: 60 } - isr
+    const response = await fetch(url)
+    // // - ssg
+    // // cache: 'no-cache' - ssr
+    // // next: { revalidate: 60 } - isr
 
     if (!response.ok) {
       throw new Error('Unable to fetch :(')

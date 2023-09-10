@@ -4,8 +4,6 @@ const nextConfig = {
     env: {
       API_URL: 'http://localhost:4000/api',
       API_URL_WITHOUT_API: 'http://localhost:4000/',
-      SIZE_WIDTH_PRODUCT_LIST: 110,
-      SIZE_HEIGHT_PRODUCT_LIST: 160,
       LIMIT_PRODUCT_ON_LIST: 8,
     },
     images: {

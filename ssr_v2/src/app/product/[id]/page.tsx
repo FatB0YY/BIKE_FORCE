@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import UserService from '@/services/UserService'
-import MyButton from '@/components/client/MyButton'
 import { IProduct } from '@/types'
+import Currency from '@/components/client/Currency'
+import AddToCartButton from '@/components/client/AddToCartButton'
 
 type Props = {
   params: {
@@ -40,7 +41,9 @@ const ProductDetails = async ({ params: { id } }: Props) => {
           {/* text */}
           <div className='flex-1 text-center lg:text-left'>
             <h1 className='text-[26px] font-medium mb-2 max-2-[450px] mx-auto lg:mx-0'>{product.name}</h1>
-            <div className='text-xl text-red-500 font-medium mb-6 '>$ {product.price}</div>
+            <div className='text-xl text-red-500 font-medium mb-6 '>
+              <Currency value={product.price} />
+            </div>
 
             <div className='max-w-lg'>
               {product.info?.map((item: any) => {
@@ -56,7 +59,10 @@ const ProductDetails = async ({ params: { id } }: Props) => {
               })}
             </div>
 
-            <MyButton product={product} />
+            <AddToCartButton
+              product={product}
+              className='bg-primary hover:bg-gray-800 transition-all py-4 px-8 text-white'
+            />
           </div>
         </div>
       </div>

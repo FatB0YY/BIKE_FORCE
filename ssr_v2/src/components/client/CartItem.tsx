@@ -1,5 +1,5 @@
-import { useAppDispatch } from '@/hooks/redux'
-import { decreaseAmount, increaseAmount, removeFromCart } from '@/redux/reducers/UserSlice'
+import { useActionCreators } from '@/hooks/redux'
+import { userActions } from '@/redux/reducers/UserSlice'
 import { IProductInCart } from '@/types'
 import { faXmark, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,8 +13,10 @@ interface IPropsProductInCartItem {
 }
 
 const CartItem = ({ productInCart }: IPropsProductInCartItem) => {
-  const dispatch = useAppDispatch()
   const { amount, id, img, isActive, name, price } = productInCart
+
+  // dispatch
+  const actionsUser = useActionCreators(userActions)
 
   return (
     <div className='flex gap-x-4 py-2 lg:px-6 border-b border-gray-200 w-full font-light text-gray-500'>
@@ -45,7 +47,7 @@ const CartItem = ({ productInCart }: IPropsProductInCartItem) => {
             </Link>
             {/* remove icon */}
             <div
-              onClick={() => dispatch(removeFromCart(id))}
+              onClick={() => actionsUser.removeFromCart(id)}
               className='text-xl cursor-pointer'
             >
               <FontAwesomeIcon
@@ -59,7 +61,7 @@ const CartItem = ({ productInCart }: IPropsProductInCartItem) => {
             <div className='flex flex-1 max-w-[100px] items-center h-full border text-primary font-medium'>
               {/* minus icon */}
               <div
-                onClick={() => dispatch(decreaseAmount(id))}
+                onClick={() => actionsUser.decreaseAmount(id)}
                 className='flex-1 h-dull flex justify-center items-center cursor-pointer h-full'
               >
                 <FontAwesomeIcon
@@ -71,7 +73,7 @@ const CartItem = ({ productInCart }: IPropsProductInCartItem) => {
               <div className='h-full flex justify-center items-center px-2'>{amount}</div>
               {/* plus icon */}
               <div
-                onClick={() => dispatch(increaseAmount(id))}
+                onClick={() => actionsUser.increaseAmount(id)}
                 className='flex-1 h-full flex justify-center items-center cursor-pointer'
               >
                 <FontAwesomeIcon

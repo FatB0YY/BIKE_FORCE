@@ -1,13 +1,15 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import UserReducer from './reducers/UserSlice'
+import { userReducer } from './reducers/UserSlice'
 
 const rootReducer = combineReducers({
-  UserReducer,
+  user: userReducer,
 })
 
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    devTools: true,
   })
 }
 

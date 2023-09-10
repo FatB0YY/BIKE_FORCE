@@ -4,35 +4,15 @@ import type { Metadata } from 'next'
 import { Providers } from '@/redux/provider'
 import '@fortawesome/fontawesome-svg-core/styles.css' // импортируйте стили Font Awesome
 import { config } from '@fortawesome/fontawesome-svg-core'
+import { Urbanist } from 'next/font/google'
+import Hero from '@/components/server/Hero'
+import Sidebar from '@/components/client/Sidebar'
+import Footer from '@/components/server/Footer'
+import Header from '@/components/server/Header'
 
 config.autoAddCss = false // Отключите автоматическое добавление стилей CSS
 
-import localFont from 'next/font/local'
-
-const myFont = localFont({
-  src: [
-    {
-      path: '../fonts/BrunoAceSC-Regular.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/BrunoAceSC-Regular.woff',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/BrunoAceSC-Regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../fonts/BrunoAceSC-Regular.eot',
-      weight: '400',
-      style: 'normal',
-    },
-  ],
-})
+const font = Urbanist({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'BIKE FORCE',
@@ -43,10 +23,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body
-        className={myFont.className}
-        style={myFont.style}
+        className={font.className}
+        style={font.style}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          <Sidebar />
+          <Hero />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   )
