@@ -1,6 +1,7 @@
 import { IProduct, IProductInCart, IUser } from '@/types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
+import { revalidateTag } from 'next/cache'
 
 interface IUserState {
   user: IUser | null

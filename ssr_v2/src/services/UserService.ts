@@ -55,7 +55,7 @@ export default class UserService {
 
   // category
   static async getAllCategory(): Promise<ICategory[]> {
-    const response = await fetch(`${BASE_URL}/category`, { cache: 'no-cache' })
+    const response = await fetch(`${BASE_URL}/category`, { next: { revalidate: 60 } })
 
     if (!response.ok) {
       throw new Error('Unable to fetch :(')
@@ -66,7 +66,7 @@ export default class UserService {
 
   // brand
   static async getAllBrand(): Promise<IBrand[]> {
-    const response = await fetch(`${BASE_URL}/brand`, { cache: 'no-cache' })
+    const response = await fetch(`${BASE_URL}/brand`, { next: { revalidate: 60 } })
 
     if (!response.ok) {
       throw new Error('Unable to fetch :(')
@@ -87,7 +87,7 @@ export default class UserService {
       },
     })
 
-    const response = await fetch(url)
+    const response = await fetch(url, { next: { revalidate: 60, tags: ['products'] } })
     // // - ssg
     // // cache: 'no-cache' - ssr
     // // next: { revalidate: 60 } - isr
