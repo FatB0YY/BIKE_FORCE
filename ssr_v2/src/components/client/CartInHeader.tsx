@@ -2,7 +2,7 @@
 import { faBagShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
-import { userActions } from '@/redux/reducers/UserSlice'
+import { userActions } from '@/redux/slices/UserSlice'
 import { useEffect } from 'react'
 
 const CartInHeader = () => {

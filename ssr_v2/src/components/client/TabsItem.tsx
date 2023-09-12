@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
-import { userActions } from '@/redux/reducers/UserSlice'
+import { userActions } from '@/redux/slices/UserSlice'
 import { ITab } from '@/types'
 
 interface ITabProps {

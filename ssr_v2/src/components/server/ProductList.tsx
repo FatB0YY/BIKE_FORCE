@@ -6,7 +6,7 @@ import NoResult from './NoResult'
 import UserService from '@/services/UserService'
 import { IBrand, ICategory, IProduct, IProductResponse } from '@/types'
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
-import { userActions } from '@/redux/reducers/UserSlice'
+import { userActions } from '@/redux/slices/UserSlice'
 
 interface IProductsPageProps {
   products: IProductResponse

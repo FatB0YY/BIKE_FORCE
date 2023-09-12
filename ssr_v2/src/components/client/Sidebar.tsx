@@ -7,18 +7,19 @@ import CartItem from './CartItem'
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
 import Link from 'next/link'
 import Currency from './Currency'
-import { userActions } from '@/redux/reducers/UserSlice'
+import { userSlice } from '@/redux/slices'
+import { useSelector } from 'react-redux'
 
 const Sidebar = () => {
   // dispatch
-  const actionsUser = useActionCreators(userActions)
+  const actionsUser = useActionCreators(userSlice.actions)
   // state redux
   const isOpenSidebar = useAppSelector((state) => state.user.isOpenSidebar)
   const cart = useAppSelector((state) => state.user.cart)
   const totalPrice = useAppSelector((state) => state.user.totalPrice)
 
   useEffect(() => {
-    const total: number = cart.reduce((accumulator: number, currentItem) => {
+    const total: number = cart.reduce((accumulator: number, currentItem: any) => {
       return accumulator + currentItem.price * currentItem.amount
     }, 0)
 

@@ -92,3 +92,8 @@ export interface IQueryProducts {
   limit: number
   page: number
 }
+
+export interface IUserData {
+  email: string
+  password: string
+}

@@ -1,20 +1,9 @@
-import { IProduct, IProductInCart, IUser } from '@/types'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../store'
-import { revalidateTag } from 'next/cache'
+/* Core */
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-interface IUserState {
-  user: IUser | null
-  isOpenSidebar: boolean
-  cart: IProductInCart[]
-  itemAmountInCart: number
-  totalPrice: number
-  page: number
-  totalCount: number
-  limit: number
-  tabCategoryId: number | null
-  tabBrandId: number | null
-}
+/* Instruments */
+import { getAllBrandAsync, getAllCategoryAsync, getAllProductAsync, getOneProductAsync } from './thunks'
+import { IProduct, IProductInCart, IUser } from '@/types'
 
 const initialState: IUserState = {
   user: null,
@@ -28,6 +17,7 @@ const initialState: IUserState = {
   limit: 4,
   tabBrandId: null,
   tabCategoryId: null,
+  product: {},
 }
 
 // функция для добавления товара в корзину
@@ -74,8 +64,8 @@ function decreaseAmountHelper(cart: IProductInCart[], id: number): IProductInCar
   }
 }
 
-export const UserSlice = createSlice({
-  name: 'UserSlice',
+export const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
     setIsOpenSidebar: (state, action: PayloadAction<boolean>) => {
@@ -140,7 +130,24 @@ export const UserSlice = createSlice({
       state.tabBrandId = action.payload
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getOneProductAsync.fulfilled, (state, action) => {
+      state.product = action.payload
+    })
+  },
 })
 
-export const { reducer: userReducer, actions: userActions } = UserSlice
-export const selectCurrentUser = (state: RootState) => state.user.user
+/* Types */
+export interface IUserState {
+  user: IUser | null
+  isOpenSidebar: boolean
+  cart: IProductInCart[]
+  itemAmountInCart: number
+  totalPrice: number
+  page: number
+  totalCount: number
+  limit: number
+  tabCategoryId: number | null
+  tabBrandId: number | null
+  product: any
+}

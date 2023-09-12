@@ -1,5 +1,5 @@
 import { useActionCreators } from '@/hooks/redux'
-import { userActions } from '@/redux/reducers/UserSlice'
+import { userActions } from '@/redux/slices/UserSlice'
 import { IProductInCart } from '@/types'
 import { faXmark, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

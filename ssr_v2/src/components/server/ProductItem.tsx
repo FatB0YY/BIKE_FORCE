@@ -9,7 +9,7 @@ import IconButton from '../client/IconButton'
 import { Expand, ShoppingCart } from 'lucide-react'
 import rfr from '@/img/webImage.jpg'
 import Currency from '../client/Currency'
-import { userActions } from '@/redux/reducers/UserSlice'
+import { userActions } from '@/redux/slices/UserSlice'
 
 const ProductItem: FC<IProductPropsId> = ({ product, brand, category }) => {
   // dispatch

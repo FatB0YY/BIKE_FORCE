@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionCreators } from '@/hooks/redux'
-import { userActions } from '@/redux/reducers/UserSlice'
+import { userActions } from '@/redux/slices/UserSlice'
 import { IProduct } from '@/types'
 import { FC } from 'react'
 
