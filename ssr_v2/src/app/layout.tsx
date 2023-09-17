@@ -5,10 +5,10 @@ import { Providers } from '@/redux/provider'
 import '@fortawesome/fontawesome-svg-core/styles.css' // импортируйте стили Font Awesome
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { Urbanist } from 'next/font/google'
-import Hero from '@/components/server/Hero'
-import Sidebar from '@/components/client/Sidebar'
-import Footer from '@/components/server/Footer'
-import Header from '@/components/server/Header'
+import Hero from '@/components/Hero'
+import Sidebar from '@/components/Sidebar'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
 
 config.autoAddCss = false // Отключите автоматическое добавление стилей CSS
 

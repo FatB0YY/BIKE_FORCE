@@ -7,6 +7,7 @@ import { IBrand, ICategory, IProduct, IProductResponse } from '@/types'
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
 import { userActions } from '@/redux/reducers/UserSlice'
 import { getAllProducts } from '@/server-actions/actions'
+import ProductItemSkeleton from '@/components/ProductItemSkeleton' // Импортируйте скелетон
 
 interface IProductsPageProps {
   brands: IBrand[]
@@ -18,8 +19,8 @@ const ProductList: FC<IProductsPageProps> = ({ brands, categories }) => {
   const tabBrandId = useAppSelector((state) => state.user.tabBrandId)!
   const tabCategoryId = useAppSelector((state) => state.user.tabCategoryId)!
   const page = useAppSelector((state) => state.user.page)
-
   const [productsState, setProductState] = useState<IProductResponse>()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (productsState) {
@@ -29,6 +30,8 @@ const ProductList: FC<IProductsPageProps> = ({ brands, categories }) => {
 
   useEffect(() => {
     const getData = async () => {
+      setIsLoading(true)
+
       const productsData = await getAllProducts({
         limit: 8,
         page: page,
@@ -37,6 +40,8 @@ const ProductList: FC<IProductsPageProps> = ({ brands, categories }) => {
       })
 
       setProductState(productsData)
+
+      setIsLoading(false)
     }
     getData()
   }, [tabBrandId, tabCategoryId, page])
@@ -72,10 +77,33 @@ const ProductList: FC<IProductsPageProps> = ({ brands, categories }) => {
     )
   }
 
+  const renderSkeleton = () => {
+    return (
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0'>
+        <ProductItemSkeleton />
+        <ProductItemSkeleton />
+        <ProductItemSkeleton />
+        <ProductItemSkeleton />
+        <ProductItemSkeleton />
+        <ProductItemSkeleton />
+        <ProductItemSkeleton />
+        <ProductItemSkeleton />
+      </div>
+    )
+  }
+
   return (
     <section className='py-16'>
       <div className='container mx-auto'>
-        {productsState && productsState.rows.length !== 0 ? renderProducts(productsState.rows) : <NoResult />}
+        {isLoading ? (
+          renderSkeleton()
+        ) : // Показывать скелетон во время загрузки
+
+        productsState && productsState.rows.length !== 0 ? (
+          renderProducts(productsState.rows)
+        ) : (
+          <NoResult />
+        )}
       </div>
     </section>
   )

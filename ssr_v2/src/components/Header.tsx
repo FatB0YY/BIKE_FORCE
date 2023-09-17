@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import LogoImage from '@/img/logo.svg'
 import Image from 'next/image'
-import CartInHeader from '../client/CartInHeader'
+import CartInHeader from '@/components/CartInHeader'
 
 const Header = () => {
   return (

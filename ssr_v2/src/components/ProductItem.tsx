@@ -2,14 +2,16 @@
 
 import React, { FC, MouseEventHandler } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import { IProductPropsId } from '@/types'
 import { useActionCreators } from '@/hooks/redux'
-import IconButton from '../client/IconButton'
+import IconButton from '@/components/IconButton'
 import { Expand, ShoppingCart } from 'lucide-react'
-import rfr from '@/img/webImage.jpg'
-import Currency from '../client/Currency'
+import Currency from '@/components/Currency'
 import { userActions } from '@/redux/reducers/UserSlice'
+
+import BikeImg from '@/img/webImage.jpg'
+// import getBase64 from '@/lib/getLocalBase64'
 
 const ProductItem: FC<IProductPropsId> = ({ product, brand, category }) => {
   // dispatch
@@ -20,15 +22,18 @@ const ProductItem: FC<IProductPropsId> = ({ product, brand, category }) => {
     actionsUser.addToCart({ id: product.id, product: product })
   }
 
+  // const myBlurDataUrl = await getBase64('')
+
   return (
     <div className='bg-white group cursor-pointer rounded-xl border p-3 space-y-4'>
       <div className='aspect-square rounded-xl bg-gray-100 relative'>
         {/* image */}
-        <Image
-          src={rfr}
+        <NextImage
+          src={BikeImg.src}
           alt={product.name}
           quality={100}
           fill
+          // placeholder='blur'
           className='aspect-square object-cover justify-center'
         />
 

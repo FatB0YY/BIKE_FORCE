@@ -1,5 +1,6 @@
 import HeroImage from '@/img/bikeforce.png'
 import Link from 'next/link'
+import NextImage from 'next/image'
 
 const Hero = () => {
   return (
@@ -23,10 +24,12 @@ const Hero = () => {
         </div>
         {/* image */}
         <div className='hidden lg:block'>
-          <img
-            src={HeroImage.src}
+          <NextImage
             alt=''
-            className='w-[350px]'
+            src={HeroImage.src}
+            width={350}
+            height={470}
+            priority
           />
         </div>
       </div>

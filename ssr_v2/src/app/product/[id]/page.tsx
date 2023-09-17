@@ -1,8 +1,8 @@
 'use server'
 
 import { Metadata } from 'next'
-import Currency from '@/components/client/Currency'
-import AddToCartButton from '@/components/client/AddToCartButton'
+import Currency from '@/components/Currency'
+import AddToCartButton from '@/components/AddToCartButton'
 import { getOneProduct } from '@/server-actions/actions'
 
 type Props = {
