@@ -3,40 +3,40 @@
 import { FC, useEffect, useState } from 'react'
 import ProductItem from './ProductItem'
 import NoResult from './NoResult'
-import UserService from '@/services/UserService'
 import { IBrand, ICategory, IProduct, IProductResponse } from '@/types'
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
 import { userActions } from '@/redux/reducers/UserSlice'
+import { getAllProducts } from '@/server-actions/actions'
 
 interface IProductsPageProps {
-  products: IProductResponse
   brands: IBrand[]
   categories: ICategory[]
 }
 
-const ProductList: FC<IProductsPageProps> = ({ products, brands, categories }) => {
+const ProductList: FC<IProductsPageProps> = ({ brands, categories }) => {
   const actionsUser = useActionCreators(userActions)
   const tabBrandId = useAppSelector((state) => state.user.tabBrandId)!
   const tabCategoryId = useAppSelector((state) => state.user.tabCategoryId)!
   const page = useAppSelector((state) => state.user.page)
-  const [productsState, setProductState] = useState<IProduct[]>([])
+
+  const [productsState, setProductState] = useState<IProductResponse>()
 
   useEffect(() => {
-    if (products) {
-      actionsUser.setTotalCount(products.count)
+    if (productsState) {
+      actionsUser.setTotalCount(productsState.count)
     }
-  }, [products])
+  }, [productsState])
 
   useEffect(() => {
     const getData = async () => {
-      const productResponse = await UserService.getAllProduct({
+      const productsData = await getAllProducts({
         limit: 8,
         page: page,
         BrandId: tabBrandId,
         CategoryId: tabCategoryId,
       })
 
-      setProductState(productResponse.rows)
+      setProductState(productsData)
     }
     getData()
   }, [tabBrandId, tabCategoryId, page])
@@ -75,8 +75,7 @@ const ProductList: FC<IProductsPageProps> = ({ products, brands, categories }) =
   return (
     <section className='py-16'>
       <div className='container mx-auto'>
-        {products.rows.length === 0 || (productsState.length === 0 && <NoResult />)}
-        {productsState.length !== 0 ? renderProducts(productsState) : renderProducts(products.rows)}
+        {productsState && productsState.rows.length !== 0 ? renderProducts(productsState.rows) : <NoResult />}
       </div>
     </section>
   )

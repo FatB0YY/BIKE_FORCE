@@ -1,8 +1,9 @@
+'use server'
+
 import { Metadata } from 'next'
-import UserService from '@/services/UserService'
-import { IProduct } from '@/types'
 import Currency from '@/components/client/Currency'
 import AddToCartButton from '@/components/client/AddToCartButton'
+import { getOneProduct } from '@/server-actions/actions'
 
 type Props = {
   params: {
@@ -10,20 +11,15 @@ type Props = {
   }
 }
 
-async function getProductDetails(id: number): Promise<IProduct> {
-  const product = await UserService.getOneProduct(id)
-  return product
-}
-
 export async function generateMetadata({ params: { id } }: Props): Promise<Metadata> {
-  const product = await getProductDetails(id)
+  const product = await getOneProduct(id)
   return {
     title: `BIKE FORCE | ${product.name} details`,
   }
 }
 
 const ProductDetails = async ({ params: { id } }: Props) => {
-  const product = await getProductDetails(id)
+  const product = await getOneProduct(id)
 
   return (
     <section className='pt-32 pb-12 lg:py-32 h-screen flex items-center'>
