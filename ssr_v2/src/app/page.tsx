@@ -1,8 +1,8 @@
 'use server'
 
-import ProductList from '@/components/ProductList'
-import Pagination from '@/components/Pagination'
-import Tabs from '@/components/Tabs'
+import ProductList from '@/components/ListProduct/ProductList'
+import Pagination from '@/components/Pagination/Pagination'
+import Tabs from '@/components/Tabs/Tabs'
 import { getAllCategory, getAllBrand } from '@/server-actions/actions'
 
 const Home = async () => {

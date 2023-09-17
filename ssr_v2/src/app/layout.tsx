@@ -1,14 +1,15 @@
 // These styles apply to every route in the application
 import '@/styles/globals.css'
 import type { Metadata } from 'next'
-import { Providers } from '@/redux/provider'
+import { ReduxProvider } from '@/components/Providers/ReduxProvider'
 import '@fortawesome/fontawesome-svg-core/styles.css' // импортируйте стили Font Awesome
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { Urbanist } from 'next/font/google'
 import Hero from '@/components/Hero'
-import Sidebar from '@/components/Sidebar'
+import Sidebar from '@/components/Sidebar/Sidebar'
 import Footer from '@/components/Footer'
-import Header from '@/components/Header'
+import Header from '@/components/Header/Header'
+import { NextAuthProvider } from '@/components/Providers/NextAuthProvider'
 
 config.autoAddCss = false // Отключите автоматическое добавление стилей CSS
 
@@ -26,13 +27,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={font.className}
         style={font.style}
       >
-        <Providers>
-          <Header />
-          <Sidebar />
-          <Hero />
-          {children}
-          <Footer />
-        </Providers>
+        <NextAuthProvider>
+          <ReduxProvider>
+            <Header />
+            <Sidebar />
+            <Hero />
+            {children}
+            <Footer />
+          </ReduxProvider>
+        </NextAuthProvider>
       </body>
     </html>
   )

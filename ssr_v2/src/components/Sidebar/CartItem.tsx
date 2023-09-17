@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import BikeImage from '@/img/webImage.jpg'
+import Currency from '../Currency'
 
 interface IPropsProductInCartItem {
   productInCart: IProductInCart
@@ -85,9 +86,10 @@ const CartItem = ({ productInCart }: IPropsProductInCartItem) => {
             {/* item price */}
             <div className='flex-1 flex items-center justify-around'>$ {price}</div>
             {/* final price */}
-            <div className='flex-1 flex justify-end items-center text-primary font-medium'>{`$ ${Number.parseFloat(
-              String(price * amount),
-            ).toFixed(2)}`}</div>
+
+            <div className='flex-1 flex justify-end items-center text-primary font-medium'>
+              <Currency value={price * amount} />
+            </div>
           </div>
         </div>
       </div>

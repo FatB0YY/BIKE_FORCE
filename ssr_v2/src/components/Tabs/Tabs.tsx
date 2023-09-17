@@ -6,6 +6,8 @@ interface IPropTabs {
   value: 'brand' | 'category'
 }
 
+//  !! баг при изменении масштаба !!
+
 const Tabs = ({ tabs, value }: IPropTabs) => {
   if (!tabs) {
     return <div className='display-none'></div>

@@ -2,12 +2,12 @@
 
 import { FC, useEffect, useState } from 'react'
 import ProductItem from './ProductItem'
-import NoResult from './NoResult'
+import NoResult from '../NoResult'
 import { IBrand, ICategory, IProduct, IProductResponse } from '@/types'
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
 import { userActions } from '@/redux/reducers/UserSlice'
 import { getAllProducts } from '@/server-actions/actions'
-import ProductItemSkeleton from '@/components/ProductItemSkeleton' // Импортируйте скелетон
+import ProductItemSkeleton from '@/components/ListProduct/ProductItemSkeleton' // Импортируйте скелетон
 
 interface IProductsPageProps {
   brands: IBrand[]

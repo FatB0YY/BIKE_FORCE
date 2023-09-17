@@ -9,7 +9,7 @@ const Pagination = () => {
   const totalCount = useAppSelector((state) => state.user.totalCount)
   const page = useAppSelector((state) => state.user.page)
 
-  const pageCount = Math.ceil(totalCount / Number(process.env.LIMIT_PRODUCT_ON_LIST)!)
+  const pageCount = Math.ceil(totalCount / Number(process.env.NEXT_PUBLIC_LIMIT_PRODUCT_ON_LIST)!)
 
   const pages = []
 

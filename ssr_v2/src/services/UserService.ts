@@ -1,7 +1,19 @@
-import { AuthResponse, IBrand, ICategory, IProduct, IProductResponse, IQueryProducts, IRole } from '@/types/index'
+import {
+  AuthResponse,
+  IBrand,
+  ICategory,
+  IErrorResponseAuth,
+  IProduct,
+  IProductResponse,
+  IQueryProducts,
+  IRole,
+} from '@/types/index'
 import qs from 'query-string'
 
-const BASE_URL = process.env.API_URL!
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
+
+// хочу написать свой тип
+// Promise<AuthResponse | IErrorResponseAuth>
 
 export default class UserService {
   // auth
@@ -14,9 +26,9 @@ export default class UserService {
       body: JSON.stringify({ email, password }),
     })
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch :(')
-    }
+    // if (!response.ok) {
+    //   throw new Error('Unable to fetch :(')
+    // }
 
     return response.json()
   }
@@ -30,9 +42,9 @@ export default class UserService {
       body: JSON.stringify({ email, password, roles }),
     })
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch :(')
-    }
+    // if (!response.ok) {
+    //   throw new Error('Unable to fetch :(')
+    // }
 
     return response.json()
   }
@@ -40,9 +52,9 @@ export default class UserService {
   static async refresh(): Promise<AuthResponse> {
     const response = await fetch(`${BASE_URL}/user/refresh`)
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch :(')
-    }
+    // if (!response.ok) {
+    //   throw new Error('Unable to fetch :(')
+    // }
 
     return response.json()
   }
@@ -57,9 +69,9 @@ export default class UserService {
   static async getAllCategory(): Promise<ICategory[]> {
     const response = await fetch(`${BASE_URL}/category`, { next: { revalidate: 60 } })
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch :(')
-    }
+    // if (!response.ok) {
+    //   throw new Error('Unable to fetch :(')
+    // }
 
     return response.json()
   }
@@ -68,9 +80,9 @@ export default class UserService {
   static async getAllBrand(): Promise<IBrand[]> {
     const response = await fetch(`${BASE_URL}/brand`, { next: { revalidate: 60 } })
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch :(')
-    }
+    // if (!response.ok) {
+    //   throw new Error('Unable to fetch :(')
+    // }
 
     return response.json()
   }
@@ -92,9 +104,9 @@ export default class UserService {
     // // cache: 'no-cache' - ssr
     // // next: { revalidate: 60 } - isr
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch :(')
-    }
+    // if (!response.ok) {
+    //   throw new Error('Unable to fetch :(')
+    // }
 
     return response.json()
   }
@@ -102,9 +114,9 @@ export default class UserService {
   static async getOneProduct(id: number): Promise<IProduct> {
     const response = await fetch(`${BASE_URL}/product/${id}`)
 
-    if (!response.ok) {
-      throw new Error('Unable to fetch :(')
-    }
+    // if (!response.ok) {
+    //   throw new Error('Unable to fetch :(')
+    // }
 
     return response.json()
   }

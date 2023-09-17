@@ -4,11 +4,7 @@ const nextConfig = {
     serverActions: true,
   },
   reactStrictMode: true,
-  env: {
-    API_URL: 'http://localhost:4000/api',
-    API_URL_WITHOUT_API: 'http://localhost:4000/',
-    LIMIT_PRODUCT_ON_LIST: 8,
-  },
+
   images: {
     remotePatterns: [
       {

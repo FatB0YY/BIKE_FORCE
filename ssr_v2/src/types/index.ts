@@ -92,3 +92,12 @@ export interface IQueryProducts {
   limit: number
   page: number
 }
+
+interface IError {
+  message?: string
+}
+
+export interface IErrorResponseAuth {
+  message?: string
+  errors?: IError[]
+}

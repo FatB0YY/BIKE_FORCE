@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CartItem from './CartItem'
 import { useActionCreators, useAppSelector } from '@/hooks/redux'
 import Link from 'next/link'
-import Currency from './Currency'
+import Currency from '../Currency'
 import { userActions } from '@/redux/reducers/UserSlice'
 
 const Sidebar = () => {

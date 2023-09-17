@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import LogoImage from '@/img/logo.svg'
-import Image from 'next/image'
-import CartInHeader from '@/components/CartInHeader'
+import NextImage from 'next/image'
+import CartInHeader from '@/components/Header/CartInHeader'
+import Navigation from '@/components/Header/Navigation'
 
 const Header = () => {
   return (
@@ -13,13 +14,16 @@ const Header = () => {
           as={`/`}
         >
           <div>
-            <Image
+            <NextImage
               width={50}
               src={LogoImage}
               alt='BIKE FORCE'
             />
           </div>
         </Link>
+
+        <Navigation />
+
         <CartInHeader />
       </div>
     </header>

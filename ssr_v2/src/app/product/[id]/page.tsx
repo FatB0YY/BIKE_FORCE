@@ -30,7 +30,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
           <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
             <img
               className='max-w-[200px] lg:max-w-sm'
-              src={`${process.env.API_URL_WITHOUT_API!}${product.img}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL_WITHOUT_API!}${product.img}`}
               alt={product.name}
             />
           </div>

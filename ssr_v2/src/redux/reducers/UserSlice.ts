@@ -1,10 +1,7 @@
-import { IProduct, IProductInCart, IUser } from '@/types'
+import { IProduct, IProductInCart } from '@/types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../store'
-import { revalidateTag } from 'next/cache'
 
 interface IUserState {
-  user: IUser | null
   isOpenSidebar: boolean
   cart: IProductInCart[]
   itemAmountInCart: number
@@ -17,7 +14,6 @@ interface IUserState {
 }
 
 const initialState: IUserState = {
-  user: null,
   isOpenSidebar: false,
   cart: [],
   itemAmountInCart: 0,
@@ -143,4 +139,3 @@ export const UserSlice = createSlice({
 })
 
 export const { reducer: userReducer, actions: userActions } = UserSlice
-export const selectCurrentUser = (state: RootState) => state.user.user
