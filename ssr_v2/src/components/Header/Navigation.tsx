@@ -5,6 +5,20 @@ import { useSession, signOut } from 'next-auth/react'
 
 const Navigation = () => {
   const session = useSession()
+
+  // const updateSession = async () => {
+  //   await session.update({
+  //     ...session,
+  //     user: {
+  //       ...session.data?.user,
+  //       accessToken: 'rfrf',
+  //       refreshToken: 'frf',
+  //     },
+  //   })
+  // }
+
+  console.log('Navigation session', session)
+
   return (
     <div>
       {session?.data && (
@@ -23,12 +37,20 @@ const Navigation = () => {
           Sign Out
         </button>
       ) : (
-        <Link
-          className='cursor-pointer bg-secondary hover:bg-[#f9e3da] font-bold py-2 px-4 rounded focus:outline-none'
-          href='/api/auth/signin'
-        >
-          Sign In
-        </Link>
+        <>
+          <Link
+            className='cursor-pointer bg-secondary hover:bg-[#f9e3da] font-bold py-2 px-4 rounded focus:outline-none'
+            href='/api/auth/signin'
+          >
+            Sign In
+          </Link>
+          <Link
+            className='ml-2 cursor-pointer bg-secondary hover:bg-[#f9e3da] font-bold py-2 px-4 rounded focus:outline-none'
+            href='/signup'
+          >
+            Sign Up
+          </Link>
+        </>
       )}
     </div>
   )

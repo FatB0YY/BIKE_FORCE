@@ -33,3 +33,9 @@ const Home = async () => {
 }
 
 export default Home
+
+// const axiosAuth = useAxiosAuth();
+// const fetchPost = async () => {
+//   const res = await axiosAuth.get("/test/user/1/posts");
+//   setPosts(res.data);
+// };

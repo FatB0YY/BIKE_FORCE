@@ -9,60 +9,38 @@ import {
   IRole,
 } from '@/types/index'
 import qs from 'query-string'
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
+import $api, { BASE_URL } from './axios'
+import { AxiosResponse } from 'axios'
 
 // хочу написать свой тип
 // Promise<AuthResponse | IErrorResponseAuth>
 
 export default class UserService {
   // auth
-  static async login(email: string, password: string): Promise<AuthResponse> {
-    const response = await fetch(`${BASE_URL}/user/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
 
-    // if (!response.ok) {
-    //   throw new Error('Unable to fetch :(')
-    // }
-
-    return response.json()
+  static async login(email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
+    return $api
+      .post<AuthResponse>('/user/login', { email, password })
+      .then((response) => {
+        return response
+      })
+      .catch(function (error) {
+        if (error.response) {
+          return error.response.data
+        }
+      })
   }
 
-  static async registration(email: string, password: string, roles: IRole[]): Promise<AuthResponse> {
-    const response = await fetch(`${BASE_URL}/user/registration`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password, roles }),
-    })
-
-    // if (!response.ok) {
-    //   throw new Error('Unable to fetch :(')
-    // }
-
-    return response.json()
-  }
-
-  static async refresh(): Promise<AuthResponse> {
-    const response = await fetch(`${BASE_URL}/user/refresh`)
-
-    // if (!response.ok) {
-    //   throw new Error('Unable to fetch :(')
-    // }
-
-    return response.json()
+  static async registration(email: string, password: string, roles: IRole[]): Promise<AxiosResponse<AuthResponse>> {
+    return $api.post<AuthResponse>('/user/registration', { email, password, roles })
   }
 
   static async logout(): Promise<void> {
-    await fetch(`${BASE_URL}/user/logout`, {
-      method: 'POST',
-    })
+    return $api.post('/user/logout')
+  }
+
+  static async refresh(): Promise<AxiosResponse<AuthResponse>> {
+    return $api.post('/user/refresh')
   }
 
   // category
@@ -117,6 +95,20 @@ export default class UserService {
     // if (!response.ok) {
     //   throw new Error('Unable to fetch :(')
     // }
+
+    return response.json()
+  }
+
+  // roles
+  static async getOneRole(name: string): Promise<IRole> {
+    const url = qs.stringifyUrl({
+      url: `${BASE_URL}/role/getOne?`,
+      query: {
+        value: name,
+      },
+    })
+
+    const response = await fetch(url)
 
     return response.json()
   }

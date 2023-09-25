@@ -10,6 +10,7 @@ import Sidebar from '@/components/Sidebar/Sidebar'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header/Header'
 import { NextAuthProvider } from '@/components/Providers/NextAuthProvider'
+import MyToastContainer from '@/components/MyToastContainer'
 
 config.autoAddCss = false // Отключите автоматическое добавление стилей CSS
 
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Hero />
             {children}
             <Footer />
+            <MyToastContainer />
           </ReduxProvider>
         </NextAuthProvider>
       </body>
