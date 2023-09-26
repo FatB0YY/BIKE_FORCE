@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 
-type ErrorObject = {
+export type ErrorObject = {
   errors?: Array<{ message: string }>
   message?: string
 }

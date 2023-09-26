@@ -1,5 +1,6 @@
 'use server'
 
+import Hero from '@/components/Hero'
 import ProductList from '@/components/ListProduct/ProductList'
 import Pagination from '@/components/Pagination/Pagination'
 import Tabs from '@/components/Tabs/Tabs'
@@ -15,6 +16,7 @@ const Home = async () => {
 
   return (
     <>
+      <Hero />
       <Tabs
         value='brand'
         tabs={brands}

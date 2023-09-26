@@ -18,7 +18,7 @@ import { AxiosResponse } from 'axios'
 export default class UserService {
   // auth
 
-  static async login(email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
+  static async login(email: string, password: string): Promise<AxiosResponse<AuthResponse | IErrorResponseAuth>> {
     return $api
       .post<AuthResponse>('/user/login', { email, password })
       .then((response) => {
@@ -26,21 +26,41 @@ export default class UserService {
       })
       .catch(function (error) {
         if (error.response) {
-          return error.response.data
+          return error.response
         }
       })
   }
 
-  static async registration(email: string, password: string, roles: IRole[]): Promise<AxiosResponse<AuthResponse>> {
-    return $api.post<AuthResponse>('/user/registration', { email, password, roles })
+  static async registration(
+    email: string,
+    password: string,
+    roles: IRole[],
+  ): Promise<AxiosResponse<AuthResponse | IErrorResponseAuth>> {
+    return $api
+      .post<AuthResponse>('/user/registration', { email, password, roles })
+      .then((response) => {
+        return response
+      })
+      .catch(function (error) {
+        if (error.response) {
+          return error.response
+        }
+      })
   }
 
   static async logout(): Promise<void> {
     return $api.post('/user/logout')
   }
 
-  static async refresh(): Promise<AxiosResponse<AuthResponse>> {
-    return $api.post('/user/refresh')
+  static async refresh(): Promise<AxiosResponse<any>> {
+    return $api
+      .post('/user/refresh')
+      .then((res) => {
+        return res.data
+      })
+      .catch((error) => {
+        console.log('my error', error)
+      })
   }
 
   // category

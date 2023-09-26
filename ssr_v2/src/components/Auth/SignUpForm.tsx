@@ -1,6 +1,7 @@
 'use client'
 import UserService from '@/services/UserService'
-import { displayErrors } from '@/utils'
+import { AuthResponse, IErrorResponseAuth } from '@/types'
+import { ErrorObject, displayErrors } from '@/utils'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, type FormEventHandler } from 'react'
@@ -26,16 +27,19 @@ const SignUpForm = () => {
     const role = await UserService.getOneRole('USER')
 
     if (role.value === 'USER') {
-      const authResponse: any = await UserService.registration(email, password, [role])
+      const authResponse = await UserService.registration(email, password, [role])
 
-      if (authResponse.errors) {
-        if (authResponse.errors.length > 0 && authResponse.message) {
-          displayErrors(authResponse)
-          return null
-        }
+      if ('accessToken' in authResponse.data && 'refreshToken' in authResponse.data) {
+        const data = authResponse.data as AuthResponse
+
+        toast.success(`Пользователь с email ${data.user.email} успешно создан!`)
+        return null
+      } else if ('message' in authResponse.data && Array.isArray(authResponse.data.errors)) {
+        const data = authResponse.data as IErrorResponseAuth
+        displayErrors(data as ErrorObject)
+        return null
       }
 
-      toast.success('Пользователь успешно создан!')
       return null
     } else {
       displayErrors({ message: 'Ошибка роли' })
@@ -43,11 +47,11 @@ const SignUpForm = () => {
     }
   }
 
-  // useEffect(() => {
-  //   if (session.data && session.status === 'authenticated') {
-  //     router.push('/profile')
-  //   }
-  // })
+  useEffect(() => {
+    if (session.data?.user && session.status === 'authenticated') {
+      router.push('/profile')
+    }
+  })
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-F5E6E0'>

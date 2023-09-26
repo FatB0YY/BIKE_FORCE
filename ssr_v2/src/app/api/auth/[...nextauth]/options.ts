@@ -2,6 +2,9 @@ import type { NextAuthOptions } from 'next-auth'
 // import GoogleProvider from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 import UserService from '@/services/UserService'
+import { AuthResponse, IErrorResponseAuth } from '@/types'
+
+import { User } from 'next-auth' // Импортируйте тип User из next-auth
 
 export const authConfig: NextAuthOptions = {
   providers: [
@@ -15,28 +18,31 @@ export const authConfig: NextAuthOptions = {
         email: { label: 'email', type: 'email', required: true },
         password: { label: 'password', type: 'password', required: true },
       },
+
+      /* eslint @typescript-eslint/no-empty-interface: "off" */
       async authorize(credentials, req) {
         if (!credentials?.email || !credentials.password) return null
+        const authResponse = await UserService.login(credentials.email, credentials.password)
 
-        const authResponse: any = await UserService.login(credentials.email, credentials.password)
+        if ('accessToken' in authResponse.data && 'refreshToken' in authResponse.data) {
+          const data = authResponse.data as AuthResponse
 
-        if (authResponse.errors.length > 0 && authResponse.message) {
-          throw new Error(JSON.stringify(authResponse))
-        }
+          if (data.user && data.user.email === credentials.email) {
+            // Сохраните токены в куках (наверно)
+            console.log('req', req)
 
-        if (authResponse.user && authResponse.user.email === credentials.email) {
-          // Сохраните токены в куках
-          console.log('req', req)
-
-          // Верните объект, который будет сохранен в сессии пользователя
-          const user = authResponse.user
-          return {
-            ...user,
-            accessToken: authResponse.accessToken,
-            refreshToken: authResponse.refreshToken,
+            return {
+              id: '',
+              ...data,
+              accessToken: data.accessToken,
+              refreshToken: data.refreshToken,
+            }
           }
-        }
+        } else if ('message' in authResponse.data && Array.isArray(authResponse.data.errors)) {
+          const data = authResponse.data as IErrorResponseAuth
 
+          throw new Error(JSON.stringify(data))
+        }
         return null
       },
     }),
@@ -45,21 +51,8 @@ export const authConfig: NextAuthOptions = {
   pages: {
     signIn: '/signin',
     signOut: '/signout',
-
-    // signIn: '/auth/signin',
   },
   callbacks: {
-    // async signIn(signInData) {
-    //   console.log('signInData', signInData)
-
-    //   return true
-    // },
-    // async redirect(redirectData) {
-    //   console.log('redirectData', redirectData)
-
-    //   return redirectData.baseUrl
-    // },
-
     async jwt({ token, user, trigger, session }) {
       // console.log('token', token)
       // console.log('user', user)

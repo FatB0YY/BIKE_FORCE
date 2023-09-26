@@ -1,11 +1,15 @@
 'use client'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import type { FormEventHandler } from 'react'
 import { displayErrors } from '@/utils/index'
 
 const SignInForm = () => {
   const router = useRouter()
+  const session = useSession()
+
+  console.log('session', session)
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
@@ -18,9 +22,11 @@ const SignInForm = () => {
       redirect: false,
     })
       .then(async (signInResponse) => {
+        console.log('signInResponse', signInResponse)
+
         if (signInResponse) {
           if (!signInResponse.error) {
-            // router.push('/profile')
+            router.push('/profile')
           }
 
           if (signInResponse.error) {
@@ -35,6 +41,12 @@ const SignInForm = () => {
         console.log(error)
       })
   }
+
+  useEffect(() => {
+    if (session.data?.user && session.status === 'authenticated') {
+      router.push('/profile')
+    }
+  })
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-F5E6E0'>

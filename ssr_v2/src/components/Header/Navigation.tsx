@@ -17,8 +17,6 @@ const Navigation = () => {
   //   })
   // }
 
-  console.log('Navigation session', session)
-
   return (
     <div>
       {session?.data && (
