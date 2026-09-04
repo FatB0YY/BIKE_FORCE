@@ -1,86 +1,62 @@
-# BIKE_FORCE
+**English** | [Русский](./README.ru.md)
 
-## Описание проекта
-Репозиторий представляет собой полноценное клиент-серверное приложение с использованием базы данных PostgreSQL. Все таблицы в базе данных были нормализованы в соответствии с третьей нормальной формой. В рамках проекта была разработана подробная документация, включающая диаграммы классов и активностей, а также инструкцию по взаимодействию с API.
+# Bike Force
 
-На клиентской стороне был реализован SSR (Server-Side Rendering) для главной страницы магазина, а также отдельная административная панель версии 2 на React с использованием RTK Query и TypeScript. Серверная часть приложения основана на Node.js, TypeScript и фреймворке Express. Все возможные ошибки были обработаны и учтены в проекте.
+A full-stack e-commerce store for bicycles and gear, built as a multi-service application: a TypeScript API over PostgreSQL, a server-side rendered storefront, a separate React admin panel, and an nginx reverse proxy tying them together under Docker Compose.
 
-В репозитории вы найдете также набор тестов, охватывающих различные сценарии использования. Проект выполнен с высоким уровнем детализации и готов к использованию в продакшн среде.
+## Architecture
 
-## Стиль кода
+| Service | Role |
+| --- | --- |
+| `server` | REST API on Node.js, Express and TypeScript, backed by PostgreSQL |
+| `ssr_v2` | Server-side rendered storefront — the main shop page is rendered on the server |
+| `client_v2` | Admin panel on React, RTK Query and TypeScript |
+| `nginx` | Reverse proxy routing traffic to the services |
+| `docs` | Class and activity diagrams, plus API documentation |
 
-### Код
+The whole stack comes up through `docker-compose.yml`.
 
-- Использование глобальных переменных (API_URL, JWT_SECRET) **только .env**!
-- Имена классов, методов, перечислений, публичных полей, публичных свойств, пространств имен: `PascalCase`
-- Имена локальных переменных и параметров: `camelCase`
-- Имена private, protected, internal и protected internal полей и свойств: `_camelCase`
-- Имена интерфейсов начинаются с I, например IUser
-- Использование только функциональных компонентов (кроме Error Boundary)
-- Экспорт компонентов всегда по умолчанию
+## Engineering decisions
 
-### Файлы
+**Database normalised to third normal form.** The schema was designed deliberately rather than grown ad hoc: tables are decomposed to 3NF, which removes update anomalies and keeps referential integrity enforceable in the database itself.
 
-- Слово **API** всегда `UPPERCASE`
-- Название компонентов, сервисов, redux слайсов, моделей, контроллеров, : `PascalCase`, например: Home.tsx, IFile.ts, UserAPI.ts, AuthController.ts
-- Название основных папок: `camelCase`, например: home, components, services, store
-- Название дополнительных файлов: `camelCase`, например: useHttp.ts, actions.ts, sizeFormat.ts
-- Название CSS / SASS / SCSS файла должно совпадать с названием компонента, где подключается этот файл стилей: home > Home.tsx home.scss
-- Название CSS / SASS / SCSS файлов: `camelCase`
+**Server-side rendering for the storefront.** The customer-facing shop page is rendered on the server so that content is present in the initial HTML — meaningful for a store, where search engine indexing and first-paint time affect the product directly. The admin panel, which has neither requirement, stays a client-side React app.
 
-### Организация
+**Separate admin client.** Splitting the admin panel from the storefront keeps two very different sets of concerns apart: the storefront is optimised for anonymous visitors and page weight, the panel for authenticated CRUD work.
 
-#### Frontend
+**Exhaustive error handling.** Failure paths are handled explicitly across the API rather than left to a generic catch-all, so clients receive consistent, meaningful responses.
 
-Если стандартный компонент. Сначала идет импорт необходимых зависимостей, обязательно последний импорт должен быть файл стилей. Если есть возможно сделать деструктуризацию – делаем, например: import React, { FC, useState, useEffect } from ‘react’.
-Далее идет экспорт функционального компонента, порядок переменных, функций:
+**Test coverage across usage scenarios.** The project includes a test suite covering the main flows.
 
-1. Свои переменные: let logo = null
-2. useState константы
-3. Константы для работы с API:
-   a. RTK Query
-   b. useSelector
-   c. useDispatch
-4. Стрелочные функции
-5. Обычные функции
-6. useEffect
-7. IF
-8. компоненты, которые возвращают tsx
-9. основной render
+## Stack
 
-#### Backend
+**Client** — React, TypeScript, Redux Toolkit Query
 
-- Порядок модификаторов следующий: `public protected internal private
-new abstract virtual override sealed static readonly extern unsafe volatile
-async`
-- Объявления пространств имен `using` идут в самом начале, перед любыми пространствами имен
-- Порядок членов класса:
-  - Сгруппируйте участников класса в следующем порядке:
-  -     Вложенные классы, перечисления, делегаты и события.
-  -     Статические, константные и только для чтения поля.
-  -     Поля и свойства.
-  -     Конструкторы и финализаторы.
-  -     Методы.
-- Внутри каждой группы элементы должны располагаться в следующем порядке:
-  - Public.
-  - Internal.
-  - Protected internal.
-  - Protected.
-  - Private.
+**Server** — Node.js, Express, TypeScript, PostgreSQL
 
-### Формат
+**Infrastructure** — Docker, Docker Compose, nginx
 
-```
-{
-  "trailingComma": "es5",
-  "tabWidth": 2,
-  "semi": false,
-  "singleQuote": true,
-  "printWidth": 80,
-  "jsxSingleQuote": true,
-  "bracketSpacing": true,
-  "bracketSameLine": false,
-  "arrowParens": "always",
-  "singleAttributePerLine": true
-}
-```
+**Tooling** — Prettier
+
+## Running locally
+
+Requires Docker and Docker Compose.
+
+    git clone https://github.com/FatB0YY/BIKE_FORCE.git
+    cd BIKE_FORCE
+
+Create the environment files with your database credentials, `API_URL` and `JWT_SECRET`, then bring the stack up:
+
+    docker compose up --build
+
+## Documentation
+
+Class diagrams, activity diagrams and the API reference are in [`docs`](./docs). Code style conventions for the project are in [`docs/code-style.md`](./docs/code-style.md).
+
+## Note
+
+The user-facing interface and the documentation are in Russian.
+
+## Author
+
+Rodion Ramazanov — [GitHub](https://github.com/FatB0YY) · [Telegram](https://t.me/iamrodionn)
